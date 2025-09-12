@@ -1,0 +1,145 @@
+.cardContainer {
+    border-radius: 10px;
+    width: 224px;
+    height: 208px;
+    box-shadow: 3px 5px 5px 0 rgba(21, 57, 90, 0.08), -3px 0 5px 0 rgba(21, 57, 90, 0.08);
+    background: #15395a;
+    padding: 20px 20px 20px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cardHeader {
+    width: 184px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 20px;
+}
+
+.cardHeaderSelector {
+    display: flex;
+    align-items: center;
+}
+
+
+
+.roundLevelSelector {
+    border-radius: 100%;
+    /* fill: #24d40c; */
+    background-color: #24d40c;
+    width: 8px;
+    height: 8px;
+    margin-right: 4px;
+}
+
+.levelTitle {
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: #b9c3c8;
+}
+
+.cardTitle {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.375;
+    text-align: center;
+    color: #fff;
+}
+
+.inputContainerDifficulty {
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+.inputContainer {
+    margin-left: 20px;
+}
+
+.cardInput {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #00d7ff;
+    width: 163px;
+}
+
+.cardInput:focus {
+    outline: none;
+    caret-color: #00d7ff;
+
+}
+
+.challengeHeader {
+    font-weight: 400;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #b9c3c8;
+}
+
+.dateContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.dayTitle {
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    text-align: center;
+    color: #b9c3c8;
+
+}
+
+
+.cardBottomContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.categorySelector {
+    border-radius: 0 15px 15px 0;
+    width: 88px;
+    height: 25px;
+    background: #fff6c0;
+    display: flex;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonList {
+    width: 70px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: space-around;
+}
+
+.clearButton {
+    display: flex;
+    justify-content: center;
+}
+
+.separatorContainer {
+    width: 1px;
+    height: 16px;
+    background-color: #b9c3c8;
+}
+
+.startButton {
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    text-align: right;
+    color: #00d7ff;
+}

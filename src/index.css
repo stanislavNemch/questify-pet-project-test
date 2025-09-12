@@ -1,0 +1,99 @@
+@import "modern-normalize/modern-normalize.css";
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+@font-face {
+    font-family: "HelveticaNeueCyr";
+    src: url("./assets/fonts/HelveticaNeueCyr-Bold.woff2") format("woff2"),
+        url("./assets/fonts/HelveticaNeueCyr-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "HelveticaNeueCyr";
+    src: url("./assets/fonts/HelveticaNeueCyr-Roman.woff2") format("woff2"),
+        url("./assets/fonts/HelveticaNeueCyr-Roman.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "HelveticaNeueCyr";
+    src: url("./assets/fonts/HelveticaNeueCyr-Black.woff2") format("woff2"),
+        url("./assets/fonts/HelveticaNeueCyr-Black.woff") format("woff");
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "HelveticaNeueCyr";
+    src: url("./assets/fonts/HelveticaNeueCyr-Light.woff2") format("woff2"),
+        url("./assets/fonts/HelveticaNeueCyr-Light.woff") format("woff");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "HelveticaNeueCyr";
+    src: url("./assets/fonts/HelveticaNeueCyr-Medium.woff2") format("woff2"),
+        url("./assets/fonts/HelveticaNeueCyr-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+}
+
+:root {
+    font-family: "HelveticaNeueCyr", sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color: #282828;
+    background-color: #f2f3f7;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    padding: 0;
+    /* background-color: #f2f3f7; */
+}
+
+/* reset styles */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    color: currentColor;
+    text-decoration: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}

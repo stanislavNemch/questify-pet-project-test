@@ -1,0 +1,244 @@
+/* Контейнер секции: режем лишнее, держим фигуры внутри блока */
+.landingPageContainer {
+    position: relative;
+    overflow: hidden;
+    min-height: 100svh; /* корректная высота на мобильных */
+    box-sizing: border-box; /* чтобы паддинги входили в 100svh */
+    padding-top: clamp(32px, 8svh, 80px);
+    padding-bottom: clamp(24px, 18svh, 236px);
+}
+
+/* Контент всегда поверх фигур */
+.landingContent {
+    position: relative;
+    z-index: 10;
+    text-align: left;
+    max-width: 281px;
+    background-color: transparent;
+}
+
+/* Если .inputGroup — последний визуальный блок */
+.inputGroup {
+    margin-bottom: 0;
+}
+
+/* Базовая рамка-«окно» для фигур: показываем только нижнюю полосу */
+.backgroundShapeBlue,
+.backgroundShapeGray {
+    border-radius: 10px;
+    position: absolute;
+    width: 408px;
+    height: 312px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Синяя фигура (над серой, но ниже контента) */
+.backgroundShapeBlue {
+    background: rgba(0, 215, 255, 0.25);
+    left: 0;
+    bottom: 0;
+    transform: translateX(-11%) translateY(100%) rotate(75deg);
+    z-index: 1;
+}
+
+/* Серая фигура (самая нижняя) */
+.backgroundShapeGray {
+    background: rgba(185, 195, 200, 0.25);
+    left: 0;
+    bottom: 0;
+    transform: translateX(-20%) translateY(100%) rotate(60deg);
+    z-index: 0;
+}
+
+/* Типографика и UI */
+.landingH1 {
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 0.02em;
+    color: #00d7ff;
+    margin-bottom: 60px;
+}
+
+.landingH2 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.61;
+    letter-spacing: 0.02em;
+    color: #15395a;
+    margin-bottom: 32px;
+}
+
+.authSection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.authSection p {
+    font-size: 14px;
+    line-height: 3.21429;
+    letter-spacing: 0.02em;
+    color: #b9c3c8;
+}
+
+.inputGroup {
+    display: flex;
+    align-items: center;
+    width: 212px;
+    height: 52px;
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin-right: 12px;
+}
+
+.usernameInput {
+    border: none;
+    border-bottom: 1px solid #c2c2c2;
+    padding: 0;
+    font-size: 16px;
+    outline: none;
+    caret-color: #00d7ff;
+    background: transparent;
+}
+.usernameInput:focus {
+    border-bottom: 1px solid #00d7ff;
+}
+
+.goButton {
+    width: 52px;
+    height: 52px;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 0.02em;
+    color: #fff;
+    border-radius: 50%;
+    border: none;
+    background-color: #ff6f00;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.25s;
+}
+.goButton:hover {
+    background-color: #e06000;
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin-right: 12px;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+@media only screen and (min-width: 768px) {
+    .landingPageContainer {
+        display: flex;
+        align-items: center;
+        min-height: 100svh;
+        box-sizing: border-box;
+        padding-top: clamp(80px, 28svh, 300px);
+        padding-bottom: 0;
+    }
+
+    .landingContent {
+        max-width: 375px;
+        padding-bottom: clamp(24px, 26svh, 291px);
+    }
+
+    .landingH1 {
+        margin-bottom: 40px;
+        font-size: 20px;
+    }
+    .landingH2 {
+        font-size: 24px;
+        line-height: 1.375;
+        margin-bottom: 40px;
+    }
+    .authSection {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px;
+    }
+    .bgStack {
+        position: absolute;
+        left: 430px;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    .mainContentWrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 1280px; /* Фиксированная ширина контейнера */
+        margin: 0 auto; /* Центрируем контейнер */
+    }
+
+    .landingPageContainer {
+        min-height: 100svh;
+        box-sizing: border-box;
+        padding-top: clamp(80px, 20svh, 240px);
+        padding-left: 229px;
+    }
+    .landingContent {
+        max-width: 645px;
+    }
+
+    .landingH1 {
+        font-size: 24px;
+        margin-bottom: 80px;
+    }
+    .landingH2 {
+        font-size: 36px;
+        line-height: 1.25;
+        margin-bottom: 35px;
+    }
+    .authSection p {
+        font-size: 23px;
+        line-height: 1.875;
+    }
+    .authSection {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+    .bgStack {
+        left: 70%;
+    }
+
+    .backgroundShapeGray {
+        width: 707px;
+        height: 470px;
+        transform: translateX(-45%) translateY(110%) rotate(75deg);
+    }
+}
+
+@media (max-height: 700px) {
+    .landingPageContainer {
+        padding-top: clamp(24px, 6svh, 60px);
+        padding-bottom: clamp(16px, 10svh, 120px);
+    }
+    @media (min-width: 768px) {
+        .landingContent {
+            padding-bottom: clamp(16px, 18svh, 200px);
+        }
+    }
+}

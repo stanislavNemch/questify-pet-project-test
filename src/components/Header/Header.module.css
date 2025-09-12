@@ -1,0 +1,163 @@
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background-color: #242a37;
+    box-shadow: 0 4px 4px 0 rgba(36, 42, 55, 0.1);
+    color: white;
+    height: 80px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #00d7ff;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.userAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+    font-size: 17px;
+}
+
+.userName {
+    font-size: 17px;
+    color: #7b8aa4;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.actionButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.trophyButtonWrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #00d7ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 0 10px 5px rgba(0, 215, 255, 0.5);
+}
+
+.trophyIcon {
+    font-size: 24px;
+    color: #000;
+    transition: color 0.3s ease;
+}
+
+.actionButton:hover .trophyButtonWrapper,
+.actionButton:focus .trophyButtonWrapper {
+    background-color: #3e4e6c;
+}
+
+.actionButton:hover .trophyIcon,
+.actionButton:focus .trophyIcon {
+    color: #7b8aa4;
+}
+
+.logoutIcon {
+    font-size: 24px;
+    color: #3e4e6c;
+    transition: color 0.3s ease;
+}
+
+.actionButton:hover .logoutIcon,
+.actionButton:focus .logoutIcon {
+    color: #7b8aa4;
+}
+
+/* Адаптивные стили */
+
+/* Планшетная версия */
+@media (min-width: 768px) and (max-width: 1279px) {
+    .headerContainer {
+        padding: 0 15px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .userAvatar {
+        width: 35px;
+        height: 35px;
+        font-size: 17px;
+    }
+
+    .trophyButtonWrapper {
+        width: 35px;
+        height: 35px;
+        box-shadow: 0 0 8px 4px rgba(0, 215, 255, 0.5);
+    }
+
+    .trophyIcon,
+    .logoutIcon {
+        font-size: 22px;
+    }
+}
+
+/* Мобильная версия */
+@media (max-width: 767px) {
+    .headerContainer {
+        padding: 0 10px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .userInfo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .userName {
+        display: none;
+    }
+
+    .userAvatar {
+        width: 30px;
+        height: 30px;
+    }
+
+    .trophyButtonWrapper {
+        width: 30px;
+        height: 30px;
+        box-shadow: 0 0 6px 3px rgba(0, 215, 255, 0.5);
+    }
+
+    .trophyIcon,
+    .logoutIcon {
+        font-size: 20px;
+    }
+}

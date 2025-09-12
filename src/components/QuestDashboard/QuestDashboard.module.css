@@ -1,0 +1,35 @@
+/* src/components/QuestDashboard/QuestDashboard.module.css */
+.dashboardContainer {
+    position: relative;
+    padding-bottom: 80px; /* Оставляем место для плавающей кнопки */
+}
+
+.QuestDashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(224px, 1fr));
+    gap: 20px;
+    padding-bottom: 32px;
+}
+
+.createButton {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background-color: #ff6f00;
+    color: white;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 1000;
+}
+
+.createButton:hover {
+    background-color: #e06000;
+}

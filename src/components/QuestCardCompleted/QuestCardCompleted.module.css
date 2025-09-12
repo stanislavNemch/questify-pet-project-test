@@ -1,0 +1,55 @@
+.completedContainer {
+    border-radius: 10px;
+    width: 224px;
+    height: 208px;
+    box-shadow: 3px 4px 4px 0 rgba(21, 57, 90, 0.03), -3px -4px 4px 0 rgba(21, 57, 90, 0.03);
+    background: #fff;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.completedTitle {
+    display: flex;
+}
+
+.completedName {
+    font-weight: 400;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #000;
+    padding-right: 8px;
+}
+
+.completedQuestName {
+    font-weight: 400;
+    font-size: 12px;
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    color: #00d7ff;
+}
+
+.completedImage {
+    width: 144px;
+    height: 124px;
+}
+
+.completedContinue {
+    width: 63px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 14px;
+}
+
+.continueText {
+    font-weight: 400;
+    font-size: 12px;
+    text-align: center;
+    color: #b9c3c8;
+    margin-right: 7px;
+}
