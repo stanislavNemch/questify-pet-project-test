@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import { MdAdd } from "react-icons/md";
 
 function QuestDashboard() {
-    // Состояние для отображения/скрытия формы создания новой карточки
     const [isCreating, setIsCreating] = useState(false);
 
     const { data, isLoading, isError, error } = useQuery({
@@ -24,8 +23,9 @@ function QuestDashboard() {
 
     const cards = data?.cards || [];
 
-    // Группировка карточек
+    // --- ИСПРАВЛЕННАЯ ЛОГИКА СОРТИРОВКИ ---
     const today = new Date().toISOString().split("T")[0];
+
     const incompleteTasks = cards.filter(
         (c) => c.status === "Incomplete" && c.type === "Task"
     );
@@ -33,13 +33,15 @@ function QuestDashboard() {
         (c) => c.status === "Incomplete" && c.type === "Challenge"
     );
 
+    // Карточки, дата которых СЕГОДНЯ или уже ПРОШЛА
     const todayCards = incompleteTasks.filter((c) => c.date <= today);
+    // Карточки, дата которых наступит В БУДУЩЕМ
     const tomorrowCards = incompleteTasks.filter((c) => c.date > today);
+
     const doneCards = cards.filter((c) => c.status === "Complete");
 
     return (
         <div className={css.dashboardContainer}>
-            {/* Секция для Challenges */}
             {challenges.length > 0 && (
                 <>
                     <h2>CHALLENGES</h2>
@@ -53,11 +55,9 @@ function QuestDashboard() {
 
             <h2>TODAY</h2>
             <div className={css.QuestDashboard}>
-                {/* Форма создания появляется первой, если isCreating === true */}
                 {isCreating && (
                     <QuestCardCreate closeForm={() => setIsCreating(false)} />
                 )}
-
                 {isLoading ? (
                     <p>Loading cards...</p>
                 ) : (
@@ -81,7 +81,6 @@ function QuestDashboard() {
                 ))}
             </div>
 
-            {/* Плавающая кнопка для создания новой задачи */}
             <button
                 className={css.createButton}
                 onClick={() => setIsCreating(true)}

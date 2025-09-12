@@ -1,15 +1,13 @@
-// src/components/QuestCardCreate/QuestCardCreate.tsx
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { cardService } from "../services/cardService";
 import { DIFFICULTIES, CATEGORIES } from "../data/constants";
-import type { CreateCardPayload, CardType } from "../types/card";
+import type { CreateCardPayload } from "../types/card";
 import css from "./QuestCardCreate.module.css";
 import {
     MdOutlineClear,
-    MdOutlineStar,
     MdArrowDropDown,
     MdCalendarMonth,
 } from "react-icons/md";
@@ -27,9 +25,6 @@ const validationSchema = Yup.object({
     category: Yup.string().oneOf(CATEGORIES).required(),
     date: Yup.string().required(),
     time: Yup.string().required(),
-    type: Yup.string()
-        .oneOf(["Task", "Challenge"] as CardType[])
-        .required(),
 });
 
 export default function QuestCardCreate({ closeForm }: Props) {
@@ -41,7 +36,7 @@ export default function QuestCardCreate({ closeForm }: Props) {
         onSuccess: () => {
             toast.success("Quest created!");
             queryClient.invalidateQueries({ queryKey: ["cards"] });
-            closeForm(); // Закрываем форму
+            closeForm();
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message || "Creation failed");
@@ -57,16 +52,15 @@ export default function QuestCardCreate({ closeForm }: Props) {
                     category: "Stuff",
                     date: new Date().toISOString().split("T")[0],
                     time: new Date().toTimeString().slice(0, 5),
-                    type: "Task",
+                    type: "Task", // Всегда создаем Task здесь
                 } as CreateCardPayload
             }
             validationSchema={validationSchema}
-            onSubmit={(values, { resetForm }) => {
+            onSubmit={(values) => {
                 mutation.mutate(values);
-                resetForm();
             }}
         >
-            {({ values }) => (
+            {() => (
                 <Form className={css.cardContainer}>
                     <div className={css.cardHeader}>
                         <div className={css.cardHeaderSelector}>
@@ -83,10 +77,6 @@ export default function QuestCardCreate({ closeForm }: Props) {
                             </Field>
                             <MdArrowDropDown />
                         </div>
-                        <Field as="select" name="type">
-                            <option value="Task">Task ⭐️</option>
-                            <option value="Challenge">Challenge 🏆</option>
-                        </Field>
                     </div>
 
                     <div className={css.inputContainer}>
@@ -95,11 +85,16 @@ export default function QuestCardCreate({ closeForm }: Props) {
                             type="text"
                             name="title"
                             className={css.cardInput}
+                            placeholder="Title..."
                         />
                         <ErrorMessage
                             name="title"
                             component="div"
-                            className="error"
+                            render={(msg) => (
+                                <div style={{ color: "red", fontSize: "10px" }}>
+                                    {msg}
+                                </div>
+                            )}
                         />
                     </div>
 
@@ -122,17 +117,20 @@ export default function QuestCardCreate({ closeForm }: Props) {
                             ))}
                         </Field>
                         <div className={css.buttonList}>
-                            <button type="reset" className={css.clearButton}>
-                                <MdOutlineClear color="#db0837" />
+                            <button
+                                type="button"
+                                onClick={closeForm}
+                                className={css.clearButton}
+                            >
+                                <MdOutlineClear color="#db0837" size={16} />
                             </button>
                             <div className={css.separatorContainer}></div>
                             <button
                                 type="submit"
                                 className={css.startButton}
                                 disabled={mutation.isPending}
-                                onClick={closeForm}
                             >
-                                {mutation.isPending ? "CREATING..." : "START"}
+                                {mutation.isPending ? "..." : "START"}
                             </button>
                         </div>
                     </div>
