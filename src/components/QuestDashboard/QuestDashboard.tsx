@@ -33,10 +33,13 @@ function QuestDashboard() {
         (c) => c.status === "Incomplete" && c.type === "Challenge"
     );
 
-    // Карточки, дата которых СЕГОДНЯ или уже ПРОШЛА
-    const todayCards = incompleteTasks.filter((c) => c.date <= today);
-    // Карточки, дата которых наступит В БУДУЩЕМ
-    const tomorrowCards = incompleteTasks.filter((c) => c.date > today);
+    // Приводим дату карточки к формату YYYY-MM-DD перед сравнением
+    const todayCards = incompleteTasks.filter(
+        (c) => c.date.split("T")[0] <= today
+    );
+    const tomorrowCards = incompleteTasks.filter(
+        (c) => c.date.split("T")[0] > today
+    );
 
     const doneCards = cards.filter((c) => c.status === "Complete");
 

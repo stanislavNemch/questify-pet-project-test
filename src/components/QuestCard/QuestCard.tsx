@@ -17,30 +17,26 @@ import {
     MdOutlineSave,
     MdEdit,
 } from "react-icons/md";
-import { GiTrophy } from "react-icons/gi";
 
 interface QuestCardProps {
     card: CardData;
 }
 
 export default function QuestCard({ card }: QuestCardProps) {
-    // Проверка на случай, если card все же придет некорректным
-    if (!card) {
-        return null; // Не рендерим ничего, если нет данных
-    }
-
+    // Move hooks above any conditional returns
     const [isEditing, setIsEditing] = useState(false);
-    // Инициализируем состояние для редактирования только когда оно нужно
+    const [isActive, setIsActive] = useState(false);
     const [editedCard, setEditedCard] = useState<EditCardPayload>({
-        title: card.title,
-        difficulty: card.difficulty,
-        category: card.category,
-        date: card.date,
-        time: card.time,
+        title: card?.title || "",
+        difficulty: card?.difficulty || DIFFICULTIES[0],
+        category: card?.category || CATEGORIES[0],
+        date: card?.date ? card.date.split("T")[0] : "",
+        time: card?.time || "",
     });
 
     const queryClient = useQueryClient();
 
+    // Move early return after hooks
     const mutationOptions = {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["cards"] });
@@ -57,6 +53,7 @@ export default function QuestCard({ card }: QuestCardProps) {
         onSuccess: () => {
             toast.success("Quest updated!");
             setIsEditing(false);
+            setIsActive(false); // Деактивируем карточку после сохранения
             mutationOptions.onSuccess();
         },
     });
@@ -78,6 +75,10 @@ export default function QuestCard({ card }: QuestCardProps) {
             mutationOptions.onSuccess();
         },
     });
+
+    if (!card) {
+        return null;
+    }
 
     const handleDelete = () => {
         if (window.confirm("Are you sure you want to delete this quest?")) {
@@ -168,7 +169,10 @@ export default function QuestCard({ card }: QuestCardProps) {
 
     // --- Рендер обычной карточки ---
     return (
-        <div className={css.cardContainer}>
+        <div
+            className={css.cardContainer}
+            onClick={() => setIsActive(!isActive)}
+        >
             <div className={css.cardHeader}>
                 <div className={css.cardHeaderSelector}>
                     <div
@@ -178,40 +182,52 @@ export default function QuestCard({ card }: QuestCardProps) {
                     <div className={css.levelTitle}>{card.difficulty}</div>
                 </div>
                 <div>
-                    {card.type === "Challenge" ? (
-                        <GiTrophy color="#00d7ff" />
-                    ) : (
-                        <MdOutlineStar />
-                    )}
+                    <MdOutlineStar />
                 </div>
             </div>
+
             <div className={css.cardTitle}>{card.title}</div>
+
             <div className={css.dateContainer}>
                 <div className={css.dayTitle}>
-                    {card.date}, {card.time}
+                    {card.date.split("T")[0]}, {card.time}
                 </div>
             </div>
+
             <div className={css.cardBottomContainer}>
                 <div className={css.categorySelector} style={cardStyle}>
                     <div className={css.categoryTitle}>{card.category}</div>
                 </div>
-                <div className={css.buttonList}>
-                    <button onClick={() => setIsEditing(true)}>
-                        <MdEdit />
-                    </button>
-                    <button
-                        onClick={handleDelete}
-                        disabled={deleteMutation.isPending}
-                    >
-                        <MdOutlineClear color="#db0837" />
-                    </button>
-                    <button
-                        onClick={() => completeMutation.mutate(card._id)}
-                        disabled={completeMutation.isPending}
-                    >
-                        <MdCheck color="#24d40c" />
-                    </button>
-                </div>
+                {isActive && (
+                    <div className={css.buttonList}>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsEditing(true);
+                            }}
+                        >
+                            <MdEdit />
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete();
+                            }}
+                            disabled={deleteMutation.isPending}
+                        >
+                            <MdOutlineClear color="#db0837" />
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                completeMutation.mutate(card._id);
+                            }}
+                            disabled={completeMutation.isPending}
+                        >
+                            <MdCheck color="#24d40c" />
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
