@@ -23,8 +23,8 @@ function QuestDashboard() {
 
     const cards = data?.cards || [];
 
-    // --- ИСПРАВЛЕННАЯ ЛОГИКА СОРТИРОВКИ ---
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Нормализуем сегодняшнюю дату к началу дня
 
     const incompleteTasks = cards.filter(
         (c) => c.status === "Incomplete" && c.type === "Task"
@@ -33,13 +33,15 @@ function QuestDashboard() {
         (c) => c.status === "Incomplete" && c.type === "Challenge"
     );
 
-    // Приводим дату карточки к формату YYYY-MM-DD перед сравнением
-    const todayCards = incompleteTasks.filter(
-        (c) => c.date.split("T")[0] <= today
-    );
-    const tomorrowCards = incompleteTasks.filter(
-        (c) => c.date.split("T")[0] > today
-    );
+    const todayCards = incompleteTasks.filter((c) => {
+        const cardDate = new Date(c.date.split("T")[0].replace(/-/g, "/"));
+        return cardDate.getTime() <= today.getTime();
+    });
+
+    const tomorrowCards = incompleteTasks.filter((c) => {
+        const cardDate = new Date(c.date.split("T")[0].replace(/-/g, "/"));
+        return cardDate.getTime() > today.getTime();
+    });
 
     const doneCards = cards.filter((c) => c.status === "Complete");
 

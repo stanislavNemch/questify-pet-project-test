@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { cardService } from "../services/cardService";
 import type { CardData, EditCardPayload } from "../types/card";
+import { formatDisplayDate } from "../utils/dateUtils";
 import {
     DIFFICULTIES,
     CATEGORIES,
@@ -190,7 +191,7 @@ export default function QuestCard({ card }: QuestCardProps) {
 
             <div className={css.dateContainer}>
                 <div className={css.dayTitle}>
-                    {card.date.split("T")[0]}, {card.time}
+                    {formatDisplayDate(card.date)}, {card.time}
                 </div>
             </div>
 

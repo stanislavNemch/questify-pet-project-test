@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cardService } from "../services/cardService";
 import toast from "react-hot-toast";
 import { CATEGORY_COLORS, DIFFICULTY_COLORS } from "../data/constants";
+import { formatDisplayDate } from "../utils/dateUtils";
 
 interface Props {
     card: CardData;
@@ -73,7 +74,7 @@ export default function QuestCardChallenge({ card }: Props) {
             <div className={css.cardTitle}>{card.title}</div>
             <div className={css.dateContainer}>
                 <div className={css.dayTitle}>
-                    by {card.date.split("T")[0]}, {card.time}
+                    by {formatDisplayDate(card.date)}, {card.time}
                 </div>
             </div>
             <div className={css.cardBottomContainer}>
