@@ -1,10 +1,10 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { cardService } from "../services/cardService";
 import type { CardData } from "../types/card";
-import { useOnClickOutside } from "../hooks/useOnClickOutside"; // Импортируем хук
-import QuestCardModalDelete from "../QuestCardModalDelete/QuestCardModalDelete"; // Импортируем модальное окно
+import { useOnClickOutside } from "../hooks/useOnClickOutside";
+import QuestCardModalDelete from "../QuestCardModalDelete/QuestCardModalDelete";
 import css from "./QuestCardCompleted.module.css";
 import { MdArrowForward } from "react-icons/md";
 import vectorLogo from "../../assets/award.svg";
@@ -20,10 +20,27 @@ export default function QuestCardCompleted({
     const cardRef = useRef<HTMLDivElement>(null);
     const queryClient = useQueryClient();
 
-    // Закрываем модальное окно при клике вне карточки
     useOnClickOutside(cardRef, () => setIsConfirmingDelete(false));
 
-    // Мутация для удаления карточки
+    // --- ДОБАВЛЕННЫЙ БЛОК ДЛЯ ОТСЛЕЖИВАНИЯ ESC ---
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                setIsConfirmingDelete(false);
+            }
+        };
+
+        // Добавляем слушатель, только если модальное окно открыто
+        if (isConfirmingDelete) {
+            document.addEventListener("keydown", handleKeyDown);
+        }
+
+        // Убираем слушатель при закрытии окна или размонтировании компонента
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [isConfirmingDelete]); // Эффект зависит от состояния модального окна
+
     const deleteMutation = useMutation({
         mutationFn: (cardId: string) => cardService.deleteCard(cardId),
         onSuccess: () => {
