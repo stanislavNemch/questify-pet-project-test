@@ -1,6 +1,6 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-import type { RefreshResponse } from "./components/types/auth";
+import type { RefreshResponse } from "../types/auth";
 
 const BASE_URL = "https://questify-backend.goit.global";
 
