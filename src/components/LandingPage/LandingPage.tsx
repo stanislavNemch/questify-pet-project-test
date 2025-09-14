@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import css from "./LandingPage.module.css";
 import toast from "react-hot-toast";
 import { authService } from "../services/authService";
-import { useAuth } from "../context/AuthContext";
 import PromoQuestCards from "../PromoQuestCards/PromoQuestCards";
+import { useAuth } from "../hooks/useAuth";
 
 export default function LandingPage() {
     const { login } = useAuth();

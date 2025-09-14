@@ -4,7 +4,7 @@ import { cardService } from "../services/cardService";
 import QuestCard from "../QuestCard/QuestCard";
 import QuestCardCreate from "../QuestCardCreate/QuestCardCreate";
 import QuestCardCompleted from "../QuestCardCompleted/QuestCardCompleted";
-import QuestCardChallenge from "../QuestCardChallenge/QuestCardChallenge"; // Убедимся, что он импортирован
+import QuestCardChallenge from "../QuestCardChallenge/QuestCardChallenge";
 import QuestGroup from "../QuestGroup/QuestGroup";
 import css from "./QuestDashboard.module.css";
 import toast from "react-hot-toast";

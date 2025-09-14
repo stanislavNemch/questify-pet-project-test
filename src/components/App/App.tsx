@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { AuthProvider, useAuth } from "../context/AuthContext";
 import Header from "../Header/Header";
 import LandingPage from "../LandingPage/LandingPage";
 import QuestDashboard from "../QuestDashboard/QuestDashboard";
 import css from "./App.module.css";
+import { useAuth } from "../hooks/useAuth";
+import { AuthProvider } from "../context/AuthProvider";
 
 function AppContent() {
     const { isLoggedIn } = useAuth();

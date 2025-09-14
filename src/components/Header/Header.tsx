@@ -2,8 +2,8 @@ import { GoTrophy } from "react-icons/go";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import css from "./Header.module.css";
 import toast from "react-hot-toast";
-import { useAuth } from "../context/AuthContext";
 import { authService } from "../services/authService";
+import { useAuth } from "../hooks/useAuth";
 
 interface HeaderProps {
     onCreateChallenge: () => void; // Функция, которую будет вызывать кнопка
