@@ -1,0 +1,43 @@
+.questGroup {
+    margin-bottom: 24px;
+}
+
+.groupHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    user-select: none; /* Чтобы текст не выделялся при клике */
+}
+
+.groupTitle {
+    font-size: 14px;
+    font-weight: bold;
+    color: #b9c3c8;
+    text-transform: uppercase;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.dividerLine {
+    width: 100%;
+    height: 1px;
+    border-top: 1px dashed #b9c3c8;
+    margin: 0 16px;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #b9c3c8;
+    display: flex;
+    align-items: center;
+}
+
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(224px, 1fr));
+    gap: 20px;
+}

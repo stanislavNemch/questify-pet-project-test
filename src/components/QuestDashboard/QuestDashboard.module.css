@@ -1,20 +1,60 @@
-/* src/components/QuestDashboard/QuestDashboard.module.css */
 .dashboardContainer {
     position: relative;
-    padding-bottom: 80px; /* Оставляем место для плавающей кнопки */
+    padding-bottom: 80px;
 }
 
-.QuestDashboard {
+.questGroup {
+    margin-bottom: 24px;
+}
+
+.groupHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.groupTitle {
+    font-size: 14px;
+    font-weight: bold;
+    color: #b9c3c8;
+    text-transform: uppercase;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.dividerLine {
+    width: 100%;
+    height: 1px;
+    border-top: 1px dashed #b9c3c8;
+    margin: 0 16px;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #b9c3c8;
+    display: flex;
+    align-items: center;
+}
+
+.cardGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(224px, 1fr));
     gap: 20px;
-    padding-bottom: 32px;
+}
+
+/* Контейнер для кнопок создания */
+.createButtonsContainer {
+    position: absolute; /* Позиционирование относительно dashboardContainer */
+    bottom: 40px;
+    right: 40px;
+    z-index: 1000;
 }
 
 .createButton {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
     width: 52px;
     height: 52px;
     border-radius: 50%;
@@ -27,7 +67,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: background-color 0.3s ease;
-    z-index: 1000;
 }
 
 .createButton:hover {

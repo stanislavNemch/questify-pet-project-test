@@ -4,16 +4,18 @@ import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { cardService } from "../services/cardService";
 import { DIFFICULTIES, CATEGORIES } from "../data/constants";
-import type { CreateCardPayload } from "../types/card";
+import type { CreateCardPayload, CardType } from "../types/card";
 import css from "./QuestCardCreate.module.css";
 import {
     MdOutlineClear,
     MdArrowDropDown,
     MdCalendarMonth,
 } from "react-icons/md";
+import { GiTrophy } from "react-icons/gi";
 
 interface Props {
     closeForm: () => void;
+    type: CardType;
 }
 
 const validationSchema = Yup.object({
@@ -27,14 +29,14 @@ const validationSchema = Yup.object({
     time: Yup.string().required(),
 });
 
-export default function QuestCardCreate({ closeForm }: Props) {
+export default function QuestCardCreate({ closeForm, type }: Props) {
     const queryClient = useQueryClient();
 
     const mutation = useMutation({
         mutationFn: (newCard: CreateCardPayload) =>
             cardService.createCard(newCard),
         onSuccess: () => {
-            toast.success("Quest created!");
+            toast.success(`${type} created!`);
             queryClient.invalidateQueries({ queryKey: ["cards"] });
             closeForm();
         },
@@ -43,20 +45,22 @@ export default function QuestCardCreate({ closeForm }: Props) {
         },
     });
 
+    // ЯВНО УКАЗЫВАЕМ ТИП ДЛЯ INITIALVALUES
+    const initialValues: CreateCardPayload = {
+        title: "",
+        difficulty: type === "Challenge" ? "Hard" : "Normal",
+        category: "Stuff",
+        date: new Date().toISOString().split("T")[0],
+        time: new Date().toTimeString().slice(0, 5),
+        type: type,
+    };
+
     return (
         <Formik
-            initialValues={
-                {
-                    title: "",
-                    difficulty: "Normal",
-                    category: "Stuff",
-                    date: new Date().toISOString().split("T")[0],
-                    time: new Date().toTimeString().slice(0, 5),
-                    type: "Task", // Всегда создаем Task здесь
-                } as CreateCardPayload
-            }
+            initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
+                // Теперь 'values' имеет правильный тип CreateCardPayload
                 mutation.mutate(values);
             }}
         >
@@ -77,24 +81,24 @@ export default function QuestCardCreate({ closeForm }: Props) {
                             </Field>
                             <MdArrowDropDown />
                         </div>
+                        {type === "Challenge" && <GiTrophy color="#00d7ff" />}
                     </div>
 
                     <div className={css.inputContainer}>
-                        <div className={css.cardTitle}>CREATE NEW QUEST</div>
+                        <div className={css.cardTitle}>
+                            CREATE NEW {type.toUpperCase()}
+                        </div>
                         <Field
                             type="text"
                             name="title"
                             className={css.cardInput}
                             placeholder="Title..."
                         />
+                        {/* ИСПОЛЬЗУЕМ CLASSNAME ВМЕСТО STYLE */}
                         <ErrorMessage
                             name="title"
                             component="div"
-                            render={(msg) => (
-                                <div style={{ color: "red", fontSize: "10px" }}>
-                                    {msg}
-                                </div>
-                            )}
+                            className={css.errorText}
                         />
                     </div>
 

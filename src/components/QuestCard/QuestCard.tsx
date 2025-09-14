@@ -24,11 +24,13 @@ interface QuestCardProps {
 }
 
 export default function QuestCard({ card }: QuestCardProps) {
+    // 1. Все хуки вызываются в самом начале, безусловно.
     const [isEditing, setIsEditing] = useState(false);
     const [editedCard, setEditedCard] = useState<EditCardPayload | null>(null);
     const cardRef = useRef<HTMLDivElement>(null);
     const queryClient = useQueryClient();
 
+    // 2. useEffect для безопасной инициализации и синхронизации состояния.
     useEffect(() => {
         if (card) {
             setEditedCard({
@@ -41,16 +43,24 @@ export default function QuestCard({ card }: QuestCardProps) {
         }
     }, [card]);
 
+    // Хуки для закрытия режима редактирования
     useOnClickOutside(cardRef, () => setIsEditing(false));
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape") setIsEditing(false);
+            if (event.key === "Escape") {
+                setIsEditing(false);
+            }
         };
-        if (isEditing) document.addEventListener("keydown", handleKeyDown);
-        return () => document.removeEventListener("keydown", handleKeyDown);
+        if (isEditing) {
+            document.addEventListener("keydown", handleKeyDown);
+        }
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
     }, [isEditing]);
 
+    // Настройки для всех мутаций
     const mutationOptions = {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["cards"] });
@@ -60,6 +70,7 @@ export default function QuestCard({ card }: QuestCardProps) {
         },
     };
 
+    // Мутации для изменения данных на сервере
     const editMutation = useMutation({
         mutationFn: (data: { cardId: string; payload: EditCardPayload }) =>
             cardService.editCard(data.cardId, data.payload),
@@ -89,10 +100,12 @@ export default function QuestCard({ card }: QuestCardProps) {
         },
     });
 
+    // 3. Проверка на наличие данных после вызова всех хуков.
     if (!card || !editedCard) {
         return null;
     }
 
+    // Функции-обработчики событий
     const handleSave = (e: React.MouseEvent) => {
         e.stopPropagation();
         editMutation.mutate({ cardId: card._id, payload: editedCard });
@@ -128,6 +141,7 @@ export default function QuestCard({ card }: QuestCardProps) {
             onClick={() => !isEditing && setIsEditing(true)}
         >
             {isEditing ? (
+                // --- Рендер формы редактирования ---
                 <>
                     <div className={css.cardHeader}>
                         <select
@@ -205,6 +219,7 @@ export default function QuestCard({ card }: QuestCardProps) {
                     </div>
                 </>
             ) : (
+                // --- Рендер обычной карточки ---
                 <>
                     <div className={css.cardHeader}>
                         <div className={css.cardHeaderSelector}>

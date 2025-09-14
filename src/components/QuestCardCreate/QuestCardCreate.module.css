@@ -2,7 +2,8 @@
     border-radius: 10px;
     width: 224px;
     height: 208px;
-    box-shadow: 3px 4px 4px 0 rgba(21, 57, 90, 0.03), -3px -4px 4px 0 rgba(21, 57, 90, 0.03);
+    box-shadow: 3px 4px 4px 0 rgba(21, 57, 90, 0.03),
+        -3px -4px 4px 0 rgba(21, 57, 90, 0.03);
     background: #fff;
     padding: 20px 20px 20px 0px;
     display: flex;
@@ -24,7 +25,11 @@
     align-items: center;
 }
 
-
+.errorText {
+    color: red;
+    font-size: 10px;
+    margin-top: 4px;
+}
 
 .roundLevelSelector {
     border-radius: 100%;
@@ -83,9 +88,7 @@
     font-size: 14px;
     letter-spacing: 0.02em;
     color: #282828;
-
 }
-
 
 .cardBottomContainer {
     display: flex;
