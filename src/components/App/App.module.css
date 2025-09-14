@@ -20,3 +20,30 @@
         padding: 0 16px;
     }
 }
+
+/* Контейнер для кнопок создания */
+.createButtonsContainer {
+    position: absolute; /* Позиционирование относительно dashboardContainer */
+    bottom: 40px;
+    right: 40px;
+    z-index: 1000;
+}
+
+.createButton {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background-color: #ff6f00;
+    color: white;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.createButton:hover {
+    background-color: #e06000;
+}

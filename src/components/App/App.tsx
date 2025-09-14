@@ -3,30 +3,38 @@ import Header from "../Header/Header";
 import LandingPage from "../LandingPage/LandingPage";
 import QuestDashboard from "../QuestDashboard/QuestDashboard";
 import css from "./App.module.css";
+import { MdAdd } from "react-icons/md";
+import type { CardType } from "../types/card";
 import { useAuth } from "../hooks/useAuth";
 import { AuthProvider } from "../context/AuthProvider";
 
 function AppContent() {
     const { isLoggedIn } = useAuth();
-    // Состояние, которое будет говорить Dashboard, что нужно создать Challenge
-    const [challengeCreationRequested, setChallengeCreationRequested] =
-        useState(false);
+    const [creationType, setCreationType] = useState<CardType | null>(null);
 
-    const handleCreateChallenge = () => {
-        setChallengeCreationRequested(true);
+    const handleCreationHandled = () => {
+        setCreationType(null);
     };
 
     return (
         <div className={css.container}>
             {isLoggedIn ? (
                 <>
-                    <Header onCreateChallenge={handleCreateChallenge} />
-                    <QuestDashboard
-                        challengeCreationRequested={challengeCreationRequested}
-                        onChallengeCreationHandled={() =>
-                            setChallengeCreationRequested(false)
-                        }
+                    <Header
+                        onCreateChallenge={() => setCreationType("Challenge")}
                     />
+                    <QuestDashboard
+                        creationType={creationType}
+                        onCreationHandled={handleCreationHandled}
+                    />
+                    <div className={css.createButtonsContainer}>
+                        <button
+                            className={css.createButton}
+                            onClick={() => setCreationType("Task")}
+                        >
+                            <MdAdd size={24} />
+                        </button>
+                    </div>
                 </>
             ) : (
                 <LandingPage />
