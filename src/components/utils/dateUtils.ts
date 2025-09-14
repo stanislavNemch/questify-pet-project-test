@@ -8,7 +8,6 @@ export const formatDisplayDate = (dateString: string): string => {
 
     // Бэкенд может возвращать дату с временем (YYYY-MM-DDTHH:mm:ss.sssZ)
     // Нам нужна только дата, поэтому берем часть до "T"
-    const cardDate = new Date(dateString.split("T")[0]);
     // Важно: new Date('YYYY-MM-DD') создает дату в UTC,
     // что может привести к смещению на день.
     // Этот трюк с заменой дефисов на слэши создает дату в локальной таймзоне.
