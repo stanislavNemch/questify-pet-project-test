@@ -1,19 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import css from "./QuestCardChallenge.module.css";
-import { MdOutlineClear, MdCheck, MdOutlineSave } from "react-icons/md";
+import {
+    MdOutlineClear,
+    MdCheck,
+    MdOutlineSave,
+    MdArrowDropDown,
+} from "react-icons/md";
 import { GiTrophy } from "react-icons/gi";
 import type { CardData, EditCardPayload } from "../types/card";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cardService } from "../services/cardService";
 import toast from "react-hot-toast";
-import {
-    DIFFICULTIES,
-    CATEGORIES,
-    CATEGORY_COLORS,
-    DIFFICULTY_COLORS,
-} from "../data/constants";
+import { DIFFICULTIES, CATEGORIES, DIFFICULTY_COLORS } from "../data/constants";
 import { formatDisplayDate } from "../utils/dateUtils";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
+import QuestCardModalDelete from "../QuestCardModalDelete/QuestCardModalDelete";
 
 interface Props {
     card: CardData;
@@ -21,6 +22,7 @@ interface Props {
 
 export default function QuestCardChallenge({ card }: Props) {
     const [isEditing, setIsEditing] = useState(false);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const [editedCard, setEditedCard] = useState<EditCardPayload | null>(null);
     const cardRef = useRef<HTMLDivElement>(null);
     const queryClient = useQueryClient();
@@ -37,14 +39,24 @@ export default function QuestCardChallenge({ card }: Props) {
         }
     }, [card]);
 
-    useOnClickOutside(cardRef, () => setIsEditing(false));
+    useOnClickOutside(cardRef, () => {
+        setIsEditing(false);
+        setIsConfirmingDelete(false);
+    });
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape") setIsEditing(false);
+            if (event.key === "Escape") {
+                setIsEditing(false);
+                setIsConfirmingDelete(false);
+            }
         };
-        if (isEditing) document.addEventListener("keydown", handleKeyDown);
-        return () => document.removeEventListener("keydown", handleKeyDown);
+        if (isEditing) {
+            document.addEventListener("keydown", handleKeyDown);
+        }
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
     }, [isEditing]);
 
     const mutationOptions = {
@@ -94,11 +106,9 @@ export default function QuestCardChallenge({ card }: Props) {
         editMutation.mutate({ cardId: card._id, payload: editedCard });
     };
 
-    const handleDelete = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (window.confirm("Delete this Challenge?")) {
-            deleteMutation.mutate(card._id);
-        }
+    const handleDeleteConfirm = () => {
+        deleteMutation.mutate(card._id);
+        setIsConfirmingDelete(false);
     };
 
     const handleComplete = (e: React.MouseEvent) => {
@@ -114,8 +124,12 @@ export default function QuestCardChallenge({ card }: Props) {
         setEditedCard((prev) => (prev ? { ...prev, [name]: value } : null));
     };
 
-    const dotStyle = { backgroundColor: DIFFICULTY_COLORS[card.difficulty] };
-    const categoryStyle = { backgroundColor: CATEGORY_COLORS[card.category] };
+    const dotStyle = {
+        backgroundColor:
+            DIFFICULTY_COLORS[
+                isEditing ? editedCard.difficulty : card.difficulty
+            ],
+    };
 
     return (
         <div
@@ -123,8 +137,19 @@ export default function QuestCardChallenge({ card }: Props) {
             className={css.cardContainer}
             onClick={() => !isEditing && setIsEditing(true)}
         >
+            {isConfirmingDelete && (
+                <QuestCardModalDelete
+                    onConfirm={handleDeleteConfirm}
+                    onCancel={() => setIsConfirmingDelete(false)}
+                />
+            )}
+
             <div className={css.cardHeader}>
                 <div className={css.cardHeaderSelector}>
+                    <div
+                        className={css.roundLevelSelector}
+                        style={dotStyle}
+                    ></div>
                     {isEditing ? (
                         <select
                             name="difficulty"
@@ -140,16 +165,9 @@ export default function QuestCardChallenge({ card }: Props) {
                             ))}
                         </select>
                     ) : (
-                        <>
-                            <div
-                                className={css.roundLevelSelector}
-                                style={dotStyle}
-                            ></div>
-                            <div className={css.levelTitle}>
-                                {card.difficulty}
-                            </div>
-                        </>
+                        <div className={css.levelTitle}>{card.difficulty}</div>
                     )}
+                    <MdArrowDropDown color="#00d7ff" />
                 </div>
                 <div>
                     <GiTrophy color="#00d7ff" />
@@ -181,12 +199,14 @@ export default function QuestCardChallenge({ card }: Props) {
                             name="date"
                             value={editedCard.date}
                             onChange={handleChange}
+                            className={css.dateInput}
                         />
                         <input
                             type="time"
                             name="time"
                             value={editedCard.time}
                             onChange={handleChange}
+                            className={css.dateInput}
                         />
                     </>
                 ) : (
@@ -202,7 +222,7 @@ export default function QuestCardChallenge({ card }: Props) {
                         name="category"
                         value={editedCard.category}
                         onChange={handleChange}
-                        className={css.categorySelector}
+                        className={css.categorySelectorEdit}
                         onClick={(e) => e.stopPropagation()}
                     >
                         {CATEGORIES.map((c) => (
@@ -212,7 +232,7 @@ export default function QuestCardChallenge({ card }: Props) {
                         ))}
                     </select>
                 ) : (
-                    <div className={css.categorySelector} style={categoryStyle}>
+                    <div className={css.categorySelector}>
                         <div className={css.categoryTitle}>{card.category}</div>
                     </div>
                 )}
@@ -223,21 +243,24 @@ export default function QuestCardChallenge({ card }: Props) {
                             onClick={handleSave}
                             disabled={editMutation.isPending}
                         >
-                            <MdOutlineSave color="#00d7ff" />
+                            <MdOutlineSave size={20} color="#00d7ff" />
                         </button>
                         <div className={css.separatorContainer}></div>
                         <button
                             onClick={handleComplete}
                             disabled={completeMutation.isPending}
                         >
-                            <MdCheck color="#24d40c" />
+                            <MdCheck size={20} color="#24d40c" />
                         </button>
                         <div className={css.separatorContainer}></div>
                         <button
-                            onClick={handleDelete}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsConfirmingDelete(true);
+                            }}
                             disabled={deleteMutation.isPending}
                         >
-                            <MdOutlineClear color="#db0837" />
+                            <MdOutlineClear size={20} color="#db0837" />
                         </button>
                     </div>
                 )}

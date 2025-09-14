@@ -1,9 +1,11 @@
 .cardContainer {
+    position: relative;
     border-radius: 10px;
     /* border: 2px solid red; */
     width: 224px;
     height: 208px;
-    box-shadow: 3px 4px 4px 0 rgba(21, 57, 90, 0.03), -3px -4px 4px 0 rgba(21, 57, 90, 0.03);
+    box-shadow: 3px 4px 4px 0 rgba(21, 57, 90, 0.03),
+        -3px -4px 4px 0 rgba(21, 57, 90, 0.03);
     background: #fff;
     padding: 20px 20px 20px 0px;
     display: flex;
@@ -74,8 +76,6 @@
     caret-color: #00d7ff;
 }
 
-
-
 .cardBottomContainer {
     display: flex;
     justify-content: space-between;
@@ -114,10 +114,7 @@
     background-color: #fff;
 }
 
-
-
 .startButton {
-
     font-size: 14px;
     letter-spacing: 0.02em;
     text-align: right;

@@ -11,6 +11,7 @@ import {
 } from "../data/constants";
 import { formatDisplayDate } from "../utils/dateUtils";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
+import QuestCardModalDelete from "../QuestCardModalDelete/QuestCardModalDelete";
 import css from "./QuestCard.module.css";
 import {
     MdOutlineClear,
@@ -24,13 +25,12 @@ interface QuestCardProps {
 }
 
 export default function QuestCard({ card }: QuestCardProps) {
-    // 1. Все хуки вызываются в самом начале, безусловно.
     const [isEditing, setIsEditing] = useState(false);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const [editedCard, setEditedCard] = useState<EditCardPayload | null>(null);
     const cardRef = useRef<HTMLDivElement>(null);
     const queryClient = useQueryClient();
 
-    // 2. useEffect для безопасной инициализации и синхронизации состояния.
     useEffect(() => {
         if (card) {
             setEditedCard({
@@ -43,13 +43,16 @@ export default function QuestCard({ card }: QuestCardProps) {
         }
     }, [card]);
 
-    // Хуки для закрытия режима редактирования
-    useOnClickOutside(cardRef, () => setIsEditing(false));
+    useOnClickOutside(cardRef, () => {
+        setIsEditing(false);
+        setIsConfirmingDelete(false);
+    });
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
                 setIsEditing(false);
+                setIsConfirmingDelete(false);
             }
         };
         if (isEditing) {
@@ -60,7 +63,6 @@ export default function QuestCard({ card }: QuestCardProps) {
         };
     }, [isEditing]);
 
-    // Настройки для всех мутаций
     const mutationOptions = {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["cards"] });
@@ -70,7 +72,6 @@ export default function QuestCard({ card }: QuestCardProps) {
         },
     };
 
-    // Мутации для изменения данных на сервере
     const editMutation = useMutation({
         mutationFn: (data: { cardId: string; payload: EditCardPayload }) =>
             cardService.editCard(data.cardId, data.payload),
@@ -100,22 +101,18 @@ export default function QuestCard({ card }: QuestCardProps) {
         },
     });
 
-    // 3. Проверка на наличие данных после вызова всех хуков.
     if (!card || !editedCard) {
         return null;
     }
 
-    // Функции-обработчики событий
     const handleSave = (e: React.MouseEvent) => {
         e.stopPropagation();
         editMutation.mutate({ cardId: card._id, payload: editedCard });
     };
 
-    const handleDelete = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (window.confirm("Are you sure you want to delete this quest?")) {
-            deleteMutation.mutate(card._id);
-        }
+    const handleDeleteConfirm = () => {
+        deleteMutation.mutate(card._id);
+        setIsConfirmingDelete(false);
     };
 
     const handleComplete = (e: React.MouseEvent) => {
@@ -140,8 +137,14 @@ export default function QuestCard({ card }: QuestCardProps) {
             className={css.cardContainer}
             onClick={() => !isEditing && setIsEditing(true)}
         >
+            {isConfirmingDelete && (
+                <QuestCardModalDelete
+                    onConfirm={handleDeleteConfirm}
+                    onCancel={() => setIsConfirmingDelete(false)}
+                />
+            )}
+
             {isEditing ? (
-                // --- Рендер формы редактирования ---
                 <>
                     <div className={css.cardHeader}>
                         <select
@@ -204,7 +207,10 @@ export default function QuestCard({ card }: QuestCardProps) {
                                 <MdOutlineSave color="#00d7ff" />
                             </button>
                             <button
-                                onClick={handleDelete}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsConfirmingDelete(true);
+                                }}
                                 disabled={deleteMutation.isPending}
                             >
                                 <MdOutlineClear color="#db0837" />
@@ -219,7 +225,6 @@ export default function QuestCard({ card }: QuestCardProps) {
                     </div>
                 </>
             ) : (
-                // --- Рендер обычной карточки ---
                 <>
                     <div className={css.cardHeader}>
                         <div className={css.cardHeaderSelector}>
