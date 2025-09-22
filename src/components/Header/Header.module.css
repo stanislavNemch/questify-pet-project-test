@@ -1,9 +1,13 @@
+.siteHeader {
+    background-color: #242a37;
+}
+
 .headerContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
-    background-color: #242a37;
+
+
     box-shadow: 0 4px 4px 0 rgba(36, 42, 55, 0.1);
     color: white;
     height: 80px;
@@ -99,9 +103,9 @@
 
 /* Планшетная версия */
 @media (min-width: 768px) and (max-width: 1279px) {
-    .headerContainer {
+    /* .headerContainer {
         padding: 0 15px;
-    }
+    } */
 
     .logo {
         font-size: 21px;

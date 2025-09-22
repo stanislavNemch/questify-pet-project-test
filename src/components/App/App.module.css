@@ -23,7 +23,8 @@
 
 /* Контейнер для кнопок создания */
 .createButtonsContainer {
-    position: absolute; /* Позиционирование относительно dashboardContainer */
+    position: fixed;
+    /* Позиционирование относительно dashboardContainer */
     bottom: 40px;
     right: 40px;
     z-index: 1000;

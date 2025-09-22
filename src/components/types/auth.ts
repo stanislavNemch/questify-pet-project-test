@@ -18,7 +18,6 @@ export interface RegistrationResponse {
 export interface UserData {
     email: string;
     id: string;
-    // cards: any[]; // Пока что, так как тип карточек не определён
 }
 
 export interface LoginResponse {

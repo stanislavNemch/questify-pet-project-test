@@ -3,258 +3,183 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { cardService } from "../services/cardService";
 import type { CardData, EditCardPayload } from "../types/card";
-import {
-    DIFFICULTIES,
-    CATEGORIES,
-    CATEGORY_COLORS,
-    DIFFICULTY_COLORS,
-} from "../data/constants";
-import { formatDisplayDate } from "../utils/dateUtils";
+import { CATEGORY_COLORS, DIFFICULTY_COLORS } from "../data/constants";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
+import { useEscapeKey } from "../hooks/useEscapeKey";
 import QuestCardModalDelete from "../QuestCardModalDelete/QuestCardModalDelete";
+import QuestCardEdit from "../QuestCardEdit/QuestCardEdit";
 import css from "./QuestCard.module.css";
-import {
-    MdOutlineClear,
-    MdOutlineStar,
-    MdCheck,
-    MdOutlineSave,
-} from "react-icons/md";
+import { MdOutlineStar } from "react-icons/md";
+import { formatDisplayDate, isQuestDueSoon } from "../utils/dateUtils";
+import { BsFire } from "react-icons/bs";
 
 interface QuestCardProps {
-    card: CardData;
+  card: CardData;
 }
 
 export default function QuestCard({ card }: QuestCardProps) {
-    const [isEditing, setIsEditing] = useState(false);
-    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
-    const [editedCard, setEditedCard] = useState<EditCardPayload | null>(null);
-    const cardRef = useRef<HTMLDivElement>(null);
-    const queryClient = useQueryClient();
+  const [isEditing, setIsEditing] = useState(false);
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [editedCard, setEditedCard] = useState<EditCardPayload | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
 
-    useEffect(() => {
-        if (card) {
-            setEditedCard({
-                title: card.title,
-                difficulty: card.difficulty,
-                category: card.category,
-                date: card.date.split("T")[0],
-                time: card.time,
-            });
-        }
-    }, [card]);
-
-    useOnClickOutside(cardRef, () => {
-        setIsEditing(false);
-        setIsConfirmingDelete(false);
-    });
-
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                setIsEditing(false);
-                setIsConfirmingDelete(false);
-            }
-        };
-        if (isEditing) {
-            document.addEventListener("keydown", handleKeyDown);
-        }
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [isEditing]);
-
-    const mutationOptions = {
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["cards"] });
-        },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || "An error occurred");
-        },
-    };
-
-    const editMutation = useMutation({
-        mutationFn: (data: { cardId: string; payload: EditCardPayload }) =>
-            cardService.editCard(data.cardId, data.payload),
-        ...mutationOptions,
-        onSuccess: () => {
-            toast.success("Quest updated!");
-            setIsEditing(false);
-            mutationOptions.onSuccess();
-        },
-    });
-
-    const deleteMutation = useMutation({
-        mutationFn: (cardId: string) => cardService.deleteCard(cardId),
-        ...mutationOptions,
-        onSuccess: () => {
-            toast.success("Quest deleted!");
-            mutationOptions.onSuccess();
-        },
-    });
-
-    const completeMutation = useMutation({
-        mutationFn: (cardId: string) => cardService.completeCard(cardId),
-        ...mutationOptions,
-        onSuccess: () => {
-            toast.success("Quest completed! Great job!");
-            mutationOptions.onSuccess();
-        },
-    });
-
-    if (!card || !editedCard) {
-        return null;
+  useEffect(() => {
+    if (card) {
+      setEditedCard({
+        title: card.title,
+        difficulty: card.difficulty,
+        category: card.category,
+        date: card.date.split("T")[0],
+        time: card.time,
+      });
     }
+  }, [card]);
 
-    const handleSave = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        editMutation.mutate({ cardId: card._id, payload: editedCard });
-    };
+  useOnClickOutside(cardRef, () => {
+    setIsEditing(false);
+    setIsConfirmingDelete(false);
+  });
 
-    const handleDeleteConfirm = () => {
-        deleteMutation.mutate(card._id);
-        setIsConfirmingDelete(false);
-    };
+  useEscapeKey(() => {
+    setIsEditing(false);
+    setIsConfirmingDelete(false);
+  }, isEditing || isConfirmingDelete);
 
-    const handleComplete = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        completeMutation.mutate(card._id);
-    };
+  const mutationOptions = {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cards"] });
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "An error occurred");
+    },
+  };
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
-        e.stopPropagation();
-        const { name, value } = e.target;
-        setEditedCard((prev) => (prev ? { ...prev, [name]: value } : null));
-    };
+  const editMutation = useMutation({
+    mutationFn: (data: { cardId: string; payload: EditCardPayload }) =>
+      cardService.editCard(data.cardId, data.payload),
+    ...mutationOptions,
+    onSuccess: () => {
+      toast.success("Quest updated!");
+      setIsEditing(false);
+      mutationOptions.onSuccess();
+    },
+  });
 
-    const cardStyle = { backgroundColor: CATEGORY_COLORS[card.category] };
-    const dotStyle = { backgroundColor: DIFFICULTY_COLORS[card.difficulty] };
+  const deleteMutation = useMutation({
+    mutationFn: (cardId: string) => cardService.deleteCard(cardId),
+    ...mutationOptions,
+    onSuccess: () => {
+      toast.success("Quest deleted!");
+      mutationOptions.onSuccess();
+    },
+  });
 
-    return (
-        <div
-            ref={cardRef}
-            className={css.cardContainer}
-            onClick={() => !isEditing && setIsEditing(true)}
-        >
-            {isConfirmingDelete && (
-                <QuestCardModalDelete
-                    onConfirm={handleDeleteConfirm}
-                    onCancel={() => setIsConfirmingDelete(false)}
-                />
+  const completeMutation = useMutation({
+    mutationFn: (cardId: string) => cardService.completeCard(cardId),
+    ...mutationOptions,
+    onSuccess: () => {
+      toast.success("Quest completed! Great job!");
+      mutationOptions.onSuccess();
+    },
+  });
+
+  if (!card || !editedCard) {
+    return null;
+  }
+
+  const handleSave = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    editMutation.mutate({ cardId: card._id, payload: editedCard });
+  };
+
+  const handleDeleteConfirm = () => {
+    deleteMutation.mutate(card._id);
+    setIsConfirmingDelete(false);
+  };
+
+  const handleComplete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    completeMutation.mutate(card._id);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    e.stopPropagation();
+    const { name, value } = e.target;
+    setEditedCard((prev) => (prev ? { ...prev, [name]: value } : null));
+  };
+
+  const cardStyle = { backgroundColor: CATEGORY_COLORS[card.category] };
+  const dotStyle = { backgroundColor: DIFFICULTY_COLORS[card.difficulty] };
+
+  return (
+    <div
+      ref={cardRef}
+      className={css.cardContainer}
+      onClick={() => !isEditing && setIsEditing(true)}
+    >
+      {isConfirmingDelete && (
+        <QuestCardModalDelete
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setIsConfirmingDelete(false)}
+        />
+      )}
+
+      {isEditing ? (
+        <QuestCardEdit
+          editedCard={editedCard}
+          onSave={handleSave}
+          onDelete={(e) => {
+            e.stopPropagation();
+            setIsConfirmingDelete(true);
+          }}
+          onComplete={handleComplete}
+          onChange={handleChange}
+          isSaving={editMutation.isPending}
+          isDeleting={deleteMutation.isPending}
+          isCompleting={completeMutation.isPending}
+        />
+      ) : (
+        <>
+          <div className={css.cardHeader}>
+            <div className={css.cardHeaderSelector}>
+              <div className={css.roundLevelSelector} style={dotStyle}></div>
+              <div className={css.levelTitle}>{card.difficulty}</div>
+            </div>
+            {/* Добавляем onClick на звездочку */}
+            <div
+              onClick={(e) => {
+                e.stopPropagation(); // Чтобы не открылся режим редактирования
+                completeMutation.mutate(card._id);
+              }}
+              style={{ cursor: "pointer" }} // Показываем, что она кликабельна
+            >
+              <MdOutlineStar color="#00d7ff" className={css.starIcon} />
+            </div>
+          </div>
+          <div className={css.cardTitle}>{card.title}</div>
+          <div className={css.dateContainer}>
+            <div className={css.dayTitle}>
+              {formatDisplayDate(card.date)}, {card.time}
+            </div>
+            {/* Иконка огня, если квест "горит" */}
+            {isQuestDueSoon(card.date, card.time) && (
+              <BsFire
+                color="#ff851c"
+                style={{ marginLeft: "8px" }}
+                size="18px"
+              />
             )}
-
-            {isEditing ? (
-                <>
-                    <div className={css.cardHeader}>
-                        <select
-                            name="difficulty"
-                            value={editedCard.difficulty}
-                            onChange={handleChange}
-                            className={css.levelTitle}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            {DIFFICULTIES.map((d) => (
-                                <option key={d} value={d}>
-                                    {d}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <input
-                        name="title"
-                        value={editedCard.title}
-                        onChange={handleChange}
-                        className={css.cardInput}
-                        onClick={(e) => e.stopPropagation()}
-                    />
-                    <div
-                        className={css.dateContainer}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <input
-                            type="date"
-                            name="date"
-                            value={editedCard.date}
-                            onChange={handleChange}
-                        />
-                        <input
-                            type="time"
-                            name="time"
-                            value={editedCard.time}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className={css.cardBottomContainer}>
-                        <select
-                            name="category"
-                            value={editedCard.category}
-                            onChange={handleChange}
-                            className={css.categorySelector}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            {CATEGORIES.map((c) => (
-                                <option key={c} value={c}>
-                                    {c}
-                                </option>
-                            ))}
-                        </select>
-                        <div className={css.buttonList}>
-                            <button
-                                onClick={handleSave}
-                                disabled={editMutation.isPending}
-                            >
-                                <MdOutlineSave color="#00d7ff" />
-                            </button>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setIsConfirmingDelete(true);
-                                }}
-                                disabled={deleteMutation.isPending}
-                            >
-                                <MdOutlineClear color="#db0837" />
-                            </button>
-                            <button
-                                onClick={handleComplete}
-                                disabled={completeMutation.isPending}
-                            >
-                                <MdCheck color="#24d40c" />
-                            </button>
-                        </div>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <div className={css.cardHeader}>
-                        <div className={css.cardHeaderSelector}>
-                            <div
-                                className={css.roundLevelSelector}
-                                style={dotStyle}
-                            ></div>
-                            <div className={css.levelTitle}>
-                                {card.difficulty}
-                            </div>
-                        </div>
-                        <div>
-                            <MdOutlineStar />
-                        </div>
-                    </div>
-                    <div className={css.cardTitle}>{card.title}</div>
-                    <div className={css.dateContainer}>
-                        <div className={css.dayTitle}>
-                            {formatDisplayDate(card.date)}, {card.time}
-                        </div>
-                    </div>
-                    <div className={css.cardBottomContainer}>
-                        <div className={css.categorySelector} style={cardStyle}>
-                            <div className={css.categoryTitle}>
-                                {card.category}
-                            </div>
-                        </div>
-                    </div>
-                </>
-            )}
-        </div>
-    );
+          </div>
+          <div className={css.cardBottomContainer}>
+            <div className={css.categorySelector} style={cardStyle}>
+              <div className={css.categoryTitle}>{card.category}</div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }

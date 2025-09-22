@@ -2,10 +2,13 @@
 .landingPageContainer {
     position: relative;
     overflow: hidden;
-    min-height: 100svh; /* корректная высота на мобильных */
-    box-sizing: border-box; /* чтобы паддинги входили в 100svh */
+    min-height: 100svh;
+    /* корректная высота на мобильных */
+    box-sizing: border-box;
+    /* чтобы паддинги входили в 100svh */
     padding-top: clamp(32px, 8svh, 80px);
     padding-bottom: clamp(24px, 18svh, 236px);
+
 }
 
 /* Контент всегда поверх фигур */
@@ -107,6 +110,7 @@
     caret-color: #00d7ff;
     background: transparent;
 }
+
 .usernameInput:focus {
     border-bottom: 1px solid #00d7ff;
 }
@@ -125,6 +129,7 @@
     flex-shrink: 0;
     transition: background-color 0.25s;
 }
+
 .goButton:hover {
     background-color: #e06000;
 }
@@ -163,16 +168,19 @@
         margin-bottom: 40px;
         font-size: 20px;
     }
+
     .landingH2 {
         font-size: 24px;
         line-height: 1.375;
         margin-bottom: 40px;
     }
+
     .authSection {
         flex-direction: column;
         align-items: flex-start;
         gap: 32px;
     }
+
     .bgStack {
         position: absolute;
         left: 430px;
@@ -188,8 +196,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 1280px; /* Фиксированная ширина контейнера */
-        margin: 0 auto; /* Центрируем контейнер */
+        width: 1280px;
+        /* Фиксированная ширина контейнера */
+        margin: 0 auto;
+        /* Центрируем контейнер */
     }
 
     .landingPageContainer {
@@ -198,6 +208,7 @@
         padding-top: clamp(80px, 20svh, 240px);
         padding-left: 229px;
     }
+
     .landingContent {
         max-width: 645px;
     }
@@ -206,20 +217,24 @@
         font-size: 24px;
         margin-bottom: 80px;
     }
+
     .landingH2 {
         font-size: 36px;
         line-height: 1.25;
         margin-bottom: 35px;
     }
+
     .authSection p {
         font-size: 23px;
         line-height: 1.875;
     }
+
     .authSection {
         flex-direction: row;
         align-items: center;
         gap: 12px;
     }
+
     .bgStack {
         left: 70%;
     }
@@ -236,9 +251,11 @@
         padding-top: clamp(24px, 6svh, 60px);
         padding-bottom: clamp(16px, 10svh, 120px);
     }
+
     @media (min-width: 768px) {
         .landingContent {
             padding-bottom: clamp(16px, 18svh, 200px);
+            margin-left: 32px;
         }
     }
 }

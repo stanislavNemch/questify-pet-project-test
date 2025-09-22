@@ -42,8 +42,7 @@ export default function LandingPage() {
             const loginResponse = await authService.login({ email, password });
             login(loginResponse.data);
             toast.success("Авторизация прошла успешно!");
-        } catch (loginError) {
-            console.error("Login failed, attempting to register:", loginError);
+        } catch {
             try {
                 // Если авторизация не удалась, попытка регистрации
                 await authService.register({ email, password });
@@ -54,9 +53,8 @@ export default function LandingPage() {
                     password,
                 });
                 login(newLoginResponse.data);
-            } catch (registerError) {
+            } catch {
                 // Если и регистрация не удалась
-                console.error("Registration failed:", registerError);
                 toast.error("Ошибка! Проверьте введенные данные.");
             }
         }

@@ -9,46 +9,44 @@ import { useAuth } from "../hooks/useAuth";
 import { AuthProvider } from "../context/AuthProvider";
 
 function AppContent() {
-    const { isLoggedIn } = useAuth();
-    const [creationType, setCreationType] = useState<CardType | null>(null);
+  const { isLoggedIn } = useAuth();
+  const [creationType, setCreationType] = useState<CardType | null>(null);
 
-    const handleCreationHandled = () => {
-        setCreationType(null);
-    };
+  const handleCreationHandled = () => {
+    setCreationType(null);
+  };
 
-    return (
-        <div className={css.container}>
-            {isLoggedIn ? (
-                <>
-                    <Header
-                        onCreateChallenge={() => setCreationType("Challenge")}
-                    />
-                    <QuestDashboard
-                        creationType={creationType}
-                        onCreationHandled={handleCreationHandled}
-                    />
-                    <div className={css.createButtonsContainer}>
-                        <button
-                            className={css.createButton}
-                            onClick={() => setCreationType("Task")}
-                        >
-                            <MdAdd size={24} />
-                        </button>
-                    </div>
-                </>
-            ) : (
-                <LandingPage />
-            )}
-        </div>
-    );
+  return (
+    <div className={css.container}>
+      {isLoggedIn ? (
+        <>
+          <Header onCreateChallenge={() => setCreationType("Challenge")} />
+          <QuestDashboard
+            creationType={creationType}
+            onCreationHandled={handleCreationHandled}
+          />
+          <div className={css.createButtonsContainer}>
+            <button
+              className={css.createButton}
+              onClick={() => setCreationType("Task")}
+            >
+              <MdAdd size={24} />
+            </button>
+          </div>
+        </>
+      ) : (
+        <LandingPage />
+      )}
+    </div>
+  );
 }
 
 function App() {
-    return (
-        <AuthProvider>
-            <AppContent />
-        </AuthProvider>
-    );
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
 }
 
 export default App;

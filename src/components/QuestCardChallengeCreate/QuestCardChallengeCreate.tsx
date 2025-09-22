@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { cardService } from "../services/cardService";
 import type { CreateCardPayload } from "../types/card";
 import { DIFFICULTIES, CATEGORIES } from "../data/constants";
-import css from "./QuestCardChallengeCreate.module.css"; // Создадим эти стили
+import css from "./QuestCardChallengeCreate.module.css";
 
 interface Props {
     onClose: () => void;

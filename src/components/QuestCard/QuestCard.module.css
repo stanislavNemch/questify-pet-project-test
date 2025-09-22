@@ -11,6 +11,19 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    transition: transform ease 0.5s, box-shadow 0.5s ease;
+}
+
+.cardContainer:hover,
+.cardContainer:focus {
+    /* box-shadow: 3px 4px 4px 4px rgba(0, 215, 255, 0.3),
+        -3px -4px 4px 4px rgba(0, 215, 255, 0.3); */
+    /* border: 1px solid #00d7ff; */
+    border: 1px solid #00d7ff;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #00d7ff, 0 0 10px #00ff9151;
+    transform: scale(1.02);
+    cursor: pointer;
 }
 
 .cardHeader {
@@ -44,13 +57,24 @@
     color: #b9c3c8;
 }
 
+.starIcon {
+    /* box-shadow: 3px 4px 4px 4px rgba(0, 215, 255, 0.3); */
+    transition: filter 0.3s ease;
+
+}
+
+.starIcon:hover {
+    /* filter: drop-shadow(8px 8px 0 rgba(135, 193, 255, 0.7)); */
+    filter: drop-shadow(0 0 4px #00d7ff) drop-shadow(0 0 8px #00ffe7) drop-shadow(0 0 12px #00d7ff);
+
+}
+
 .cardTitle {
     font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+    font-size: 16px;
     text-align: center;
-    color: #b9c3c8;
+    color: #282828;
+    margin-left: 20px;
 }
 
 .inputContainerDifficulty {
@@ -74,6 +98,18 @@
 .cardInput:focus {
     outline: none;
     caret-color: #00d7ff;
+}
+
+.dateContainer {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    text-align: center;
+    color: #b9c3c8;
 }
 
 .cardBottomContainer {
