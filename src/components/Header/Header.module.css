@@ -1,14 +1,12 @@
 .siteHeader {
     background-color: #242a37;
+    box-shadow: 0 4px 4px 0 rgba(36, 42, 55, 0.1);
 }
 
 .headerContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-
-    box-shadow: 0 4px 4px 0 rgba(36, 42, 55, 0.1);
     color: white;
     height: 80px;
 }
@@ -102,10 +100,10 @@
 /* Адаптивные стили */
 
 /* Планшетная версия */
-@media (min-width: 768px) and (max-width: 1279px) {
-    /* .headerContainer {
-        padding: 0 15px;
-    } */
+@media only screen and (min-width: 768px) {
+    .actions {
+        gap: 40px;
+    }
 
     .logo {
         font-size: 21px;
@@ -131,10 +129,6 @@
 
 /* Мобильная версия */
 @media (max-width: 767px) {
-    .headerContainer {
-        padding: 0 10px;
-    }
-
     .logo {
         font-size: 18px;
     }
