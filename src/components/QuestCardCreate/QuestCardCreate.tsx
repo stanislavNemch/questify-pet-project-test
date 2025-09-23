@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { cardService } from "../services/cardService";
 import { DIFFICULTIES, CATEGORIES } from "../data/constants";
+import { getTodayLocalISO } from "../utils/dateUtils";
 import type { CreateCardPayload, CardType } from "../types/card";
 import css from "./QuestCardCreate.module.css";
 import { MdOutlineClear, MdCalendarMonth } from "react-icons/md";
@@ -47,7 +48,7 @@ export default function QuestCardCreate({ closeForm, type }: Props) {
         title: "",
         difficulty: type === "Challenge" ? "Hard" : "Normal",
         category: "Stuff",
-        date: new Date().toISOString().split("T")[0],
+        date: getTodayLocalISO(),
         time: new Date().toTimeString().slice(0, 5),
         type: type,
     };

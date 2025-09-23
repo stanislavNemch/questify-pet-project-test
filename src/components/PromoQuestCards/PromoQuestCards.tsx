@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { promoCardsData } from "./PromoCardsData";
 import type { CardData } from "../types/card";
+import { getTodayLocalISO } from "../utils/dateUtils";
 
 export default function PromoQuestCards() {
     const settings = {
@@ -39,7 +40,7 @@ export default function PromoQuestCards() {
                             title: promo.title,
                             difficulty: promo.difficulty,
                             category: promo.category,
-                            date: new Date().toISOString().split("T")[0],
+                            date: getTodayLocalISO(),
                             time: "12:00",
                             type: promo.type,
                             status: promo.status,

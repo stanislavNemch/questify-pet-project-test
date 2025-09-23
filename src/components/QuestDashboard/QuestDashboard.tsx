@@ -9,6 +9,7 @@ import QuestGroup from "../QuestGroup/QuestGroup";
 import css from "./QuestDashboard.module.css";
 import toast from "react-hot-toast";
 import type { CardData, CardType } from "../types/card";
+import { getTodayLocalISO } from "../utils/dateUtils";
 import ChallengeCardCompleted from "../ChallengeCardCompleted/ChallengeCardCompleted";
 
 interface DashboardProps {
@@ -59,7 +60,7 @@ function QuestDashboard({ creationType, onCreationHandled }: DashboardProps) {
     }
 
     const cards: CardData[] = data?.cards || [];
-    const today = new Date().toISOString().split("T")[0];
+    const today = getTodayLocalISO();
 
     const incompleteCards = cards.filter((c) => c.status === "Incomplete");
     const doneCards = cards.filter((c) => c.status === "Complete");

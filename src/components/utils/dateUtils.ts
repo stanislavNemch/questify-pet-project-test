@@ -41,3 +41,20 @@ export const isQuestDueSoon = (date: string, time: string): boolean => {
     // и меньше или равна одному часу.
     return difference > 0 && difference <= oneHour;
 };
+
+// Вернуть локальную дату в формате YYYY-MM-DD (без UTC-сдвига)
+export const getTodayLocalISO = (): string => {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+};
+
+// Преобразовать любой Date в локальный YYYY-MM-DD
+export const toLocalISODate = (d: Date): string => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+};

@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { cardService } from "../services/cardService";
 import type { CreateCardPayload } from "../types/card";
 import { DIFFICULTIES, CATEGORIES } from "../data/constants";
+import { getTodayLocalISO } from "../utils/dateUtils";
 import css from "./QuestCardChallengeCreate.module.css";
 import { getErrorMessage } from "../utils/errorUtils";
 
@@ -45,7 +46,7 @@ export default function QuestCardChallengeCreate({ onClose }: Props) {
                             title: "",
                             difficulty: "Hard",
                             category: "Learning",
-                            date: new Date().toISOString().split("T")[0],
+                            date: getTodayLocalISO(),
                             time: "12:00",
                             type: "Challenge", // Тип жестко задан
                         } as CreateCardPayload
