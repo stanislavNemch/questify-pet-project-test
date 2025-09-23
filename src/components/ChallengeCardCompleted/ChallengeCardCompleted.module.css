@@ -1,0 +1,69 @@
+.completedContainer {
+    position: relative;
+    border-radius: 10px;
+    width: 224px;
+    height: 208px;
+    box-shadow: 3px 4px 4px 0 rgba(21, 57, 90, 0.03),
+        -3px -4px 4px 0 rgba(21, 57, 90, 0.03);
+    background: #15395a;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: transform 0.35s ease, box-shadow 0.35s ease,
+        border-color 0.35s ease, opacity 0.35s ease;
+}
+
+.completedContainer:hover,
+.completedContainer:focus {
+    border: 1px solid #00d7ff;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #00d7ff, 0 0 10px #00ff9151;
+    transform: scale(1.02);
+    cursor: pointer;
+}
+
+.completedTitle {
+    display: flex;
+    align-items: baseline;
+}
+
+.completedName {
+    font-weight: 400;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #b9c3c8; /* на тёмном фоне */
+    padding-right: 8px;
+}
+
+.completedQuestName {
+    font-weight: 400;
+    font-size: 12px;
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    color: #00d7ff; /* остаётся акцентным */
+}
+
+.completedImage {
+    width: 144px;
+    height: 124px;
+    margin-top: 8px;
+}
+
+.completedContinue {
+    width: 63px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 14px auto 0;
+}
+
+.continueText {
+    font-weight: 400;
+    font-size: 12px;
+    text-align: center;
+    color: #b9c3c8;
+    margin-right: 7px;
+}
