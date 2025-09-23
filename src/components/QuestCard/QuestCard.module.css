@@ -11,19 +11,68 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform ease 0.5s, box-shadow 0.5s ease;
+    transition: transform 0.35s ease, box-shadow 0.35s ease,
+        border-color 0.35s ease, opacity 0.35s ease;
 }
 
 .cardContainer:hover,
 .cardContainer:focus {
-    /* box-shadow: 3px 4px 4px 4px rgba(0, 215, 255, 0.3),
-        -3px -4px 4px 4px rgba(0, 215, 255, 0.3); */
-    /* border: 1px solid #00d7ff; */
     border: 1px solid #00d7ff;
     border-radius: 10px;
     box-shadow: 0 0 5px #00d7ff, 0 0 10px #00ff9151;
     transform: scale(1.02);
     cursor: pointer;
+}
+
+/* Вспышка чек-марки поверх карточки */
+.cardCompleting::after {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 56px;
+    font-weight: 900;
+    color: #24d40c;
+    text-shadow: 0 0 10px rgba(36, 212, 12, 0.5),
+        0 0 18px rgba(36, 212, 12, 0.35);
+    opacity: 0;
+    animation: qcCheckFlash 300ms ease-out 80ms forwards;
+    pointer-events: none;
+}
+
+@keyframes qcCompletePulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes qcCompleteSlide {
+    to {
+        transform: translateY(-8px) scale(0.98);
+        opacity: 0;
+    }
+}
+
+@keyframes qcCheckFlash {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.2;
+    }
 }
 
 .cardHeader {
@@ -60,13 +109,12 @@
 .starIcon {
     /* box-shadow: 3px 4px 4px 4px rgba(0, 215, 255, 0.3); */
     transition: filter 0.3s ease;
-
 }
 
 .starIcon:hover {
     /* filter: drop-shadow(8px 8px 0 rgba(135, 193, 255, 0.7)); */
-    filter: drop-shadow(0 0 4px #00d7ff) drop-shadow(0 0 8px #00ffe7) drop-shadow(0 0 12px #00d7ff);
-
+    filter: drop-shadow(0 0 4px #00d7ff) drop-shadow(0 0 8px #00ffe7)
+        drop-shadow(0 0 12px #00d7ff);
 }
 
 .cardTitle {
