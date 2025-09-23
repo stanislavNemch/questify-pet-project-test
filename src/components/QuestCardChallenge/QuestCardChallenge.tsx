@@ -264,19 +264,19 @@ export default function QuestCardChallenge({ card }: Props) {
                         </button>
                         <div className={css.separatorContainer}></div>
                         <button
+                            onClick={handleDeleteConfirm}
+                            disabled={deleteMutation.isPending || isCompleting}
+                        >
+                            <MdOutlineClear color="#db0837" />
+                        </button>
+                        <div className={css.separatorContainer}></div>
+                        <button
                             onClick={handleComplete}
                             disabled={
                                 completeMutation.isPending || isCompleting
                             }
                         >
                             <MdCheck color="#24d40c" />
-                        </button>
-                        <div className={css.separatorContainer}></div>
-                        <button
-                            onClick={handleDeleteConfirm}
-                            disabled={deleteMutation.isPending || isCompleting}
-                        >
-                            <MdOutlineClear color="#db0837" />
                         </button>
                     </div>
                 )}

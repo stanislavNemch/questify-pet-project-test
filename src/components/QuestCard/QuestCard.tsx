@@ -133,7 +133,10 @@ export default function QuestCard({ card }: QuestCardProps) {
     };
 
     const cardStyle = { backgroundColor: CATEGORY_COLORS[card.category] };
-    const dotStyle = { backgroundColor: DIFFICULTY_COLORS[card.difficulty] };
+    const currentDifficulty = isEditing
+        ? editedCard!.difficulty
+        : card.difficulty;
+    const dotStyle = { backgroundColor: DIFFICULTY_COLORS[currentDifficulty] };
 
     return (
         <div
@@ -147,19 +150,25 @@ export default function QuestCard({ card }: QuestCardProps) {
                 <>
                     <div className={css.cardHeader}>
                         {/* при редактировании показываем селект сложности */}
-                        <select
-                            name="difficulty"
-                            value={editedCard!.difficulty}
-                            onChange={handleChange}
-                            className={css.levelTitle}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            {DIFFICULTIES.map((d) => (
-                                <option key={d} value={d}>
-                                    {d}
-                                </option>
-                            ))}
-                        </select>
+                        <div className={css.cardHeaderSelector}>
+                            <div
+                                className={css.roundLevelSelector}
+                                style={dotStyle}
+                            />
+                            <select
+                                name="difficulty"
+                                value={editedCard!.difficulty}
+                                onChange={handleChange}
+                                className={css.levelTitle}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                {DIFFICULTIES.map((d) => (
+                                    <option key={d} value={d}>
+                                        {d}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
                     {/* редактируемый заголовок */}
@@ -216,6 +225,10 @@ export default function QuestCard({ card }: QuestCardProps) {
                             >
                                 <MdOutlineSave color="#00d7ff" />
                             </button>
+                            <div
+                                className={css.separatorContainer}
+                                aria-hidden="true"
+                            />
                             <button
                                 onClick={handleDeleteConfirm}
                                 disabled={
@@ -224,6 +237,10 @@ export default function QuestCard({ card }: QuestCardProps) {
                             >
                                 <MdOutlineClear color="#db0837" />
                             </button>
+                            <div
+                                className={css.separatorContainer}
+                                aria-hidden="true"
+                            />
                             <button
                                 onClick={handleComplete}
                                 disabled={

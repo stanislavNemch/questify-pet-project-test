@@ -213,32 +213,61 @@
 }
 
 .buttonList {
-    width: 70px;
-    height: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 6px; /* равномерный зазор между кнопками и разделителями */
+    height: 16px;
     position: relative;
-    justify-content: space-between;
 }
 
 .buttonList button {
-    background: inherit;
-    color: white;
+    background: transparent;
     border: none;
     padding: 0;
-    cursor: pointer;
-}
-
-.clearButton {
     display: flex;
+    align-items: center;
     justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+
+    transition: background-color 0.2s ease, transform 0.1s ease,
+        opacity 0.2s ease;
+    outline: none;
 }
 
+/* Ховер/фокус */
+.buttonList button:hover:not(:disabled),
+.buttonList button:focus-visible:not(:disabled) {
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Активное нажатие */
+.buttonList button:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+/* Disabled */
+.buttonList button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Размер иконок */
+.buttonList button svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Вертикальный разделитель */
 .separatorContainer {
     width: 1px;
     height: 16px;
     background-color: #b9c3c8;
+    flex: 0 0 auto;
+    border-radius: 1px; /* чуть сгладим край */
 }
 
 .startButton {
@@ -246,17 +275,4 @@
     letter-spacing: 0.02em;
     text-align: right;
     color: #00d7ff;
-}
-
-.iconSave {
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.iconSave:hover {
-    /* border: 1px solid #00d7ff; */
-
-    background-color: #b9c3c8;
-    padding: 0;
-    box-sizing: border-box;
 }
