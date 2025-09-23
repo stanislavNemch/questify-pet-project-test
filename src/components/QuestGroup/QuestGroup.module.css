@@ -15,7 +15,7 @@
     font-weight: bold;
     color: #b9c3c8;
     text-transform: uppercase;
-    margin: 0;
+    margin-right: 5px;
     white-space: nowrap;
 }
 
@@ -23,7 +23,7 @@
     width: 100%;
     height: 1px;
     border-top: 1px dashed #b9c3c8;
-    margin: 0 16px;
+    margin: 0 5px;
 }
 
 .toggleButton {
@@ -31,7 +31,7 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    color: #b9c3c8;
+    color: #00d7ff;
     display: flex;
     align-items: center;
 }
