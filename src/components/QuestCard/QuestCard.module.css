@@ -93,7 +93,6 @@
 
 .roundLevelSelector {
     border-radius: 100%;
-    /* fill: #24d40c; */
     background-color: #24d40c;
     width: 8px;
     height: 8px;
@@ -107,12 +106,10 @@
 }
 
 .starIcon {
-    /* box-shadow: 3px 4px 4px 4px rgba(0, 215, 255, 0.3); */
     transition: filter 0.3s ease;
 }
 
 .starIcon:hover {
-    /* filter: drop-shadow(8px 8px 0 rgba(135, 193, 255, 0.7)); */
     filter: drop-shadow(0 0 4px #00d7ff) drop-shadow(0 0 8px #00ffe7)
         drop-shadow(0 0 12px #00d7ff);
 }

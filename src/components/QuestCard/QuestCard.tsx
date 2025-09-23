@@ -3,7 +3,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { cardService } from "../services/cardService";
 import type { CardData, EditCardPayload } from "../types/card";
-import { CATEGORY_COLORS, DIFFICULTY_COLORS } from "../data/constants";
+import {
+    CATEGORY_COLORS,
+    DIFFICULTY_COLORS,
+    DIFFICULTIES,
+    CATEGORIES,
+} from "../data/constants"; // ← добавили DIFFICULTIES, CATEGORIES
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { useEscapeKey } from "../hooks/useEscapeKey";
 import { getErrorMessage } from "../utils/errorUtils";
@@ -118,6 +123,15 @@ export default function QuestCard({ card }: QuestCardProps) {
         });
     };
 
+    // Вернули обработчик изменений
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+        e.stopPropagation();
+        const { name, value } = e.target;
+        setEditedCard((prev) => (prev ? { ...prev, [name]: value } : null));
+    };
+
     const cardStyle = { backgroundColor: CATEGORY_COLORS[card.category] };
     const dotStyle = { backgroundColor: DIFFICULTY_COLORS[card.difficulty] };
 
@@ -126,42 +140,73 @@ export default function QuestCard({ card }: QuestCardProps) {
             ref={cardRef}
             className={`${css.cardContainer} ${
                 isCompleting ? css.cardCompleting : ""
-            }`} // NEW
+            }`}
             onClick={() => !isEditing && setIsEditing(true)}
         >
             {isEditing ? (
                 <>
                     <div className={css.cardHeader}>
-                        <div className={css.cardHeaderSelector}>
-                            <div
-                                className={css.roundLevelSelector}
-                                style={dotStyle}
-                            ></div>
-                            <div className={css.levelTitle}>
-                                {card.difficulty}
-                            </div>
-                        </div>
+                        {/* при редактировании показываем селект сложности */}
+                        <select
+                            name="difficulty"
+                            value={editedCard!.difficulty}
+                            onChange={handleChange}
+                            className={css.levelTitle}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {DIFFICULTIES.map((d) => (
+                                <option key={d} value={d}>
+                                    {d}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                    <div className={css.cardTitle}>{card.title}</div>
-                    <div className={css.dateContainer}>
-                        <div className={css.dayTitle}>
-                            {formatDisplayDate(card.date)}, {card.time}
-                        </div>
-                        {/* Иконка огня, если квест "горит" */}
-                        {isQuestDueSoon(card.date, card.time) && (
-                            <BsFire
-                                color="#ff851c"
-                                style={{ marginLeft: "8px" }}
-                                size="18px"
-                            />
-                        )}
+
+                    {/* редактируемый заголовок */}
+                    <input
+                        name="title"
+                        value={editedCard!.title}
+                        onChange={handleChange}
+                        className={css.cardInput}
+                        onClick={(e) => e.stopPropagation()}
+                        placeholder="Title..."
+                    />
+
+                    {/* редактируемые дата и время */}
+                    <div
+                        className={css.dateContainer}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <input
+                            type="date"
+                            name="date"
+                            value={editedCard!.date}
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="time"
+                            name="time"
+                            value={editedCard!.time}
+                            onChange={handleChange}
+                        />
                     </div>
+
                     <div className={css.cardBottomContainer}>
-                        <div className={css.categorySelector} style={cardStyle}>
-                            <div className={css.categoryTitle}>
-                                {card.category}
-                            </div>
-                        </div>
+                        {/* редактируемая категория */}
+                        <select
+                            name="category"
+                            value={editedCard!.category}
+                            onChange={handleChange}
+                            className={css.categorySelector}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {CATEGORIES.map((c) => (
+                                <option key={c} value={c}>
+                                    {c}
+                                </option>
+                            ))}
+                        </select>
+
                         <div className={css.buttonList}>
                             <button
                                 onClick={handleSave}
@@ -202,7 +247,6 @@ export default function QuestCard({ card }: QuestCardProps) {
                                 {card.difficulty}
                             </div>
                         </div>
-                        {/* Кликаем по звезде — используем тот же handleComplete */}
                         <div
                             onClick={handleComplete}
                             role="button"
@@ -227,12 +271,13 @@ export default function QuestCard({ card }: QuestCardProps) {
                             />
                         </div>
                     </div>
+
                     <div className={css.cardTitle}>{card.title}</div>
+
                     <div className={css.dateContainer}>
                         <div className={css.dayTitle}>
                             {formatDisplayDate(card.date)}, {card.time}
                         </div>
-                        {/* Иконка огня, если квест "горит" */}
                         {isQuestDueSoon(card.date, card.time) && (
                             <BsFire
                                 color="#ff851c"
@@ -241,6 +286,7 @@ export default function QuestCard({ card }: QuestCardProps) {
                             />
                         )}
                     </div>
+
                     <div className={css.cardBottomContainer}>
                         <div className={css.categorySelector} style={cardStyle}>
                             <div className={css.categoryTitle}>
