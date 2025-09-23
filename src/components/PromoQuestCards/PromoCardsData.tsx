@@ -1,10 +1,12 @@
-export type PromoCard = {
+import type { Difficulty, Category, CardType, CardStatus } from "../types/card";
 
+export type PromoCard = {
     id: number;
     title: string;
-    difficulty: "Easy" | "Normal" | "Hard";
-    category: "Stuff" | "Family" | "Health" | "Learning" | "Leisure" | "Work";
-    type: "Task";
+    difficulty: Difficulty;
+    category: Category;
+    type: CardType;
+    status: CardStatus;
 };
 
 export const promoCardsData: PromoCard[] = [
@@ -14,6 +16,15 @@ export const promoCardsData: PromoCard[] = [
         difficulty: "Hard",
         category: "Work",
         type: "Task",
+        status: "Incomplete",
+    },
+    {
+        id: 302,
+        title: "Daily coding 14 days",
+        difficulty: "Normal",
+        category: "Learning",
+        type: "Challenge",
+        status: "Complete",
     },
     {
         id: 2,
@@ -21,6 +32,15 @@ export const promoCardsData: PromoCard[] = [
         difficulty: "Easy",
         category: "Family",
         type: "Task",
+        status: "Incomplete",
+    },
+    {
+        id: 101,
+        title: "Clean the garage",
+        difficulty: "Normal",
+        category: "Stuff",
+        type: "Task",
+        status: "Complete",
     },
     {
         id: 3,
@@ -28,6 +48,7 @@ export const promoCardsData: PromoCard[] = [
         difficulty: "Normal",
         category: "Health",
         type: "Task",
+        status: "Incomplete",
     },
     {
         id: 4,
@@ -35,6 +56,15 @@ export const promoCardsData: PromoCard[] = [
         difficulty: "Easy",
         category: "Learning",
         type: "Task",
+        status: "Incomplete",
+    },
+    {
+        id: 201,
+        title: "30-min HIIT workout",
+        difficulty: "Hard",
+        category: "Health",
+        type: "Challenge",
+        status: "Incomplete",
     },
     {
         id: 5,
@@ -42,82 +72,38 @@ export const promoCardsData: PromoCard[] = [
         difficulty: "Easy",
         category: "Health",
         type: "Task",
+        status: "Incomplete",
     },
     {
         id: 6,
-        title: "Visit the dentist at Lumident",
-        difficulty: "Hard",
-        category: "Leisure",
-        type: "Task",
-    },
-    {
-        id: 7,
-        title: "Webinar",
+        title: "Team webinar",
         difficulty: "Normal",
         category: "Learning",
         type: "Task",
+        status: "Incomplete",
     },
     {
-        id: 8,
-        title: "Finish homework",
-        difficulty: "Easy",
-        category: "Leisure",
-        type: "Task",
-    },
-    {
-        id: 9,
-        title: "Submit report",
-        difficulty: "Hard",
-        category: "Stuff",
-        type: "Task",
-    },
-    {
-        id: 10,
-        title: "Buy the gift for Mary",
-        difficulty: "Easy",
-        category: "Family",
-        type: "Task",
-    },
-    {
-        id: 11,
-        title: "Visit the dentist at Lumident",
-        difficulty: "Normal",
-        category: "Health",
-        type: "Task",
-    },
-    {
-        id: 12,
-        title: "Finish homework",
+        id: 102,
+        title: "Pay utility bills",
         difficulty: "Easy",
         category: "Stuff",
         type: "Task",
+        status: "Complete",
     },
     {
-        id: 13,
-        title: "Morning run",
-        difficulty: "Easy",
-        category: "Family",
-        type: "Task",
-    },
-    {
-        id: 14,
-        title: "Visit the dentist at Lumident",
-        difficulty: "Hard",
-        category: "Health",
-        type: "Task",
-    },
-    {
-        id: 15,
-        title: "Webinar",
+        id: 202,
+        title: "Read 50 pages",
         difficulty: "Normal",
         category: "Learning",
-        type: "Task",
+        type: "Challenge",
+        status: "Incomplete",
     },
     {
-        id: 16,
-        title: "Finish homework",
-        difficulty: "Easy",
-        category: "Learning",
-        type: "Task",
+        id: 301,
+        title: "Cold shower 7 days",
+        difficulty: "Hard",
+        category: "Health",
+        type: "Challenge",
+        status: "Complete",
     },
 ];

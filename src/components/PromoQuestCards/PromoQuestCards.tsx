@@ -1,5 +1,8 @@
 import Slider from "react-slick";
 import QuestCard from "../QuestCard/QuestCard";
+import QuestCardChallenge from "../QuestCardChallenge/QuestCardChallenge";
+import QuestCardCompleted from "../QuestCardCompleted/QuestCardCompleted";
+import ChallengeCardCompleted from "../ChallengeCardCompleted/ChallengeCardCompleted";
 import css from "./PromoQuestCards.module.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -29,23 +32,47 @@ export default function PromoQuestCards() {
         <div className={css.contained}>
             <div className={css.diagonalCanvas}>
                 <Slider {...settings}>
-                    {promoCardsData.map((card) => {
-                        // Приводим промо-карточку к типу CardData для QuestCard
+                    {promoCardsData.map((promo) => {
+                        // Приводим промо-объект к CardData (дата/время для вида)
                         const cardForDisplay: CardData = {
-                            ...card,
-                            _id: `promo-${card.id}`, // Добавляем временный ID
+                            _id: `promo-${promo.id}`,
+                            title: promo.title,
+                            difficulty: promo.difficulty,
+                            category: promo.category,
                             date: new Date().toISOString().split("T")[0],
                             time: "12:00",
-                            status: "Incomplete",
+                            type: promo.type,
+                            status: promo.status,
                         };
 
+                        let content: React.ReactNode = null;
+
+                        if (promo.type === "Challenge") {
+                            content =
+                                promo.status === "Complete" ? (
+                                    <ChallengeCardCompleted
+                                        cardData={cardForDisplay}
+                                    />
+                                ) : (
+                                    <QuestCardChallenge card={cardForDisplay} />
+                                );
+                        } else {
+                            content =
+                                promo.status === "Complete" ? (
+                                    <QuestCardCompleted
+                                        cardData={cardForDisplay}
+                                    />
+                                ) : (
+                                    <QuestCard card={cardForDisplay} />
+                                );
+                        }
+
                         return (
-                            <div key={card.id} className={css.slide}>
+                            <div key={promo.id} className={css.slide}>
                                 <div
                                     className={`${css.slideInner} ${css.upright}`}
                                 >
-                                    {/* Передаем один проп 'card' */}
-                                    <QuestCard card={cardForDisplay} />
+                                    {content}
                                 </div>
                             </div>
                         );
