@@ -276,3 +276,47 @@
     text-align: right;
     color: #00d7ff;
 }
+
+/* Кнопка-обёртка для иконки кубка */
+.trophyButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease,
+        opacity 0.2s ease;
+    outline: none;
+}
+
+/* hover/focus подсветка */
+.trophyButton:hover,
+.trophyButton:focus-visible {
+    background-color: rgba(0, 215, 255, 0.12);
+}
+
+/* активное нажатие */
+.trophyButton:active {
+    transform: scale(0.96);
+}
+
+/* состояние "disabled" по aria-атрибуту */
+.trophyButton[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Иконка кубка */
+.trophyIcon {
+    font-size: 20px;
+    color: #00d7ff;
+    transition: filter 0.2s ease;
+}
+
+/* лёгкое свечение у иконки на hover/focus */
+.trophyButton:hover .trophyIcon,
+.trophyButton:focus-visible .trophyIcon {
+    filter: drop-shadow(0 0 4px #00d7ff);
+}

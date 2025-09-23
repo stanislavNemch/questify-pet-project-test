@@ -121,6 +121,16 @@ export default function QuestCardChallenge({ card }: Props) {
         setEditedCard((prev) => (prev ? { ...prev, [name]: value } : null));
     };
 
+    const handleCompleteKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        const disabled = completeMutation.isPending || isCompleting;
+        if (disabled) return;
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            // переиспользуем логику клика
+            handleComplete(e as unknown as React.MouseEvent);
+        }
+    };
+
     const dotStyle = {
         backgroundColor:
             DIFFICULTY_COLORS[
@@ -133,7 +143,7 @@ export default function QuestCardChallenge({ card }: Props) {
             ref={cardRef}
             className={`${css.cardContainer} ${
                 isCompleting ? css.cardCompleting : ""
-            }`} // NEW
+            }`}
             onClick={() => !isEditing && setIsEditing(true)}
         >
             <div className={css.cardHeader}>
@@ -164,21 +174,16 @@ export default function QuestCardChallenge({ card }: Props) {
                 {/* Клик по кубку завершает Challenge с той же анимацией */}
                 <div
                     onClick={handleComplete}
+                    onKeyDown={handleCompleteKeyDown}
                     role="button"
                     aria-label="Complete challenge"
                     aria-disabled={completeMutation.isPending || isCompleting}
-                    style={{
-                        cursor:
-                            completeMutation.isPending || isCompleting
-                                ? "not-allowed"
-                                : "pointer",
-                        opacity:
-                            completeMutation.isPending || isCompleting
-                                ? 0.6
-                                : 1,
-                    }}
+                    tabIndex={
+                        completeMutation.isPending || isCompleting ? -1 : 0
+                    }
+                    className={css.trophyButton}
                 >
-                    <GiTrophy color="#00d7ff" />
+                    <GiTrophy className={css.trophyIcon} />
                 </div>
             </div>
 
