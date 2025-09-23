@@ -6,6 +6,7 @@ import { cardService } from "../services/cardService";
 import type { CreateCardPayload } from "../types/card";
 import { DIFFICULTIES, CATEGORIES } from "../data/constants";
 import css from "./QuestCardChallengeCreate.module.css";
+import { getErrorMessage } from "../utils/errorUtils";
 
 interface Props {
     onClose: () => void;
@@ -30,8 +31,8 @@ export default function QuestCardChallengeCreate({ onClose }: Props) {
             queryClient.invalidateQueries({ queryKey: ["cards"] });
             onClose(); // Закрываем модальное окно после успеха
         },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || "Creation failed");
+        onError: (error: unknown) => {
+            toast.error(getErrorMessage(error, "Creation failed"));
         },
     });
 

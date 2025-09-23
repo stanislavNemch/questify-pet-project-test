@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 import type { RefreshResponse } from "../types/auth";
 
@@ -19,9 +19,15 @@ export const setAuthHeader = (token: string | null) => {
 
 // --- Перехватчик ответов для обновления токенов ---
 let isRefreshing = false;
-let failedQueue: any[] = [];
 
-const processQueue = (error: any, token: string | null = null) => {
+type QueueEntry = {
+    resolve: (token: string | null) => void;
+    reject: (error: unknown) => void;
+};
+
+let failedQueue: QueueEntry[] = [];
+
+const processQueue = (error: unknown, token: string | null = null) => {
     failedQueue.forEach((prom) => {
         if (error) {
             prom.reject(error);
@@ -32,10 +38,13 @@ const processQueue = (error: any, token: string | null = null) => {
     failedQueue = [];
 };
 
+type RetriableAxiosRequestConfig = AxiosRequestConfig & { _retry?: boolean };
+
 api.interceptors.response.use(
     (response) => response,
-    async (error) => {
-        const originalRequest = error.config;
+    async (error: AxiosError) => {
+        const originalRequest = (error.config ||
+            {}) as RetriableAxiosRequestConfig;
 
         // Обработка ошибки соединения с сервером
         if (!error.response) {
@@ -47,11 +56,17 @@ api.interceptors.response.use(
 
         if (error.response?.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
-                return new Promise(function (resolve, reject) {
+                return new Promise<string | null>(function (resolve, reject) {
                     failedQueue.push({ resolve, reject });
                 })
                     .then((token) => {
-                        originalRequest.headers.Authorization = `Bearer ${token}`;
+                        if (originalRequest.headers) {
+                            originalRequest.headers.Authorization = `Bearer ${token}`;
+                        } else {
+                            originalRequest.headers = {
+                                Authorization: `Bearer ${token}`,
+                            };
+                        }
                         return api(originalRequest);
                     })
                     .catch((err) => {
@@ -67,6 +82,7 @@ api.interceptors.response.use(
 
             if (!refreshToken || !sid) {
                 // Если нет токенов, ничего не делаем
+                isRefreshing = false;
                 return Promise.reject(error);
             }
 
@@ -83,10 +99,17 @@ api.interceptors.response.use(
                 setAuthHeader(data.newAccessToken); // Устанавливаем новый accessToken
 
                 processQueue(null, data.newAccessToken);
-                originalRequest.headers.Authorization = `Bearer ${data.newAccessToken}`;
+
+                if (originalRequest.headers) {
+                    originalRequest.headers.Authorization = `Bearer ${data.newAccessToken}`;
+                } else {
+                    originalRequest.headers = {
+                        Authorization: `Bearer ${data.newAccessToken}`,
+                    };
+                }
 
                 return api(originalRequest);
-            } catch (refreshError) {
+            } catch (refreshError: unknown) {
                 processQueue(refreshError, null);
                 localStorage.clear();
                 window.location.reload(); // Перезагрузка для выхода из системы

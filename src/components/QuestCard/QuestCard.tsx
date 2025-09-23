@@ -6,6 +6,7 @@ import type { CardData, EditCardPayload } from "../types/card";
 import { CATEGORY_COLORS, DIFFICULTY_COLORS } from "../data/constants";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { useEscapeKey } from "../hooks/useEscapeKey";
+import { getErrorMessage } from "../utils/errorUtils";
 import css from "./QuestCard.module.css";
 import {
     MdOutlineStar,
@@ -52,8 +53,8 @@ export default function QuestCard({ card }: QuestCardProps) {
             // Больше не вызываем здесь — отложим в onSuccess клика
             queryClient.invalidateQueries({ queryKey: ["cards"] });
         },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || "An error occurred");
+        onError: (error: unknown) => {
+            toast.error(getErrorMessage(error, "An error occurred"));
         },
     };
 
@@ -116,14 +117,6 @@ export default function QuestCard({ card }: QuestCardProps) {
             },
         });
     };
-
-    // const handleChange = (
-    //     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    // ) => {
-    //     e.stopPropagation();
-    //     const { name, value } = e.target;
-    //     setEditedCard((prev) => (prev ? { ...prev, [name]: value } : null));
-    // };
 
     const cardStyle = { backgroundColor: CATEGORY_COLORS[card.category] };
     const dotStyle = { backgroundColor: DIFFICULTY_COLORS[card.difficulty] };

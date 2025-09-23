@@ -10,6 +10,7 @@ import { DIFFICULTIES, CATEGORIES, DIFFICULTY_COLORS } from "../data/constants";
 import { useEscapeKey } from "../hooks/useEscapeKey";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { formatDisplayDate, isQuestDueSoon } from "../utils/dateUtils";
+import { getErrorMessage } from "../utils/errorUtils";
 import { BsFire } from "react-icons/bs";
 
 interface Props {
@@ -48,8 +49,8 @@ export default function QuestCardChallenge({ card }: Props) {
             // не используем здесь; отложим в onSuccess клика
             queryClient.invalidateQueries({ queryKey: ["cards"] });
         },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || "An error occurred");
+        onError: (error: unknown) => {
+            toast.error(getErrorMessage(error, "An error occurred"));
         },
     };
 

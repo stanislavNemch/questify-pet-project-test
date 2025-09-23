@@ -9,6 +9,7 @@
     align-items: center;
     color: white;
     height: 80px;
+    padding: 0 20px;
 }
 
 .logo {
@@ -97,10 +98,12 @@
     color: #7b8aa4;
 }
 
-/* Адаптивные стили */
-
 /* Планшетная версия */
 @media only screen and (min-width: 768px) {
+    .headerContainer {
+        padding: 0 32px;
+    }
+
     .actions {
         gap: 40px;
     }
@@ -124,6 +127,13 @@
     .trophyIcon,
     .logoutIcon {
         font-size: 22px;
+    }
+}
+
+/* desktop styles */
+@media only screen and (min-width: 1280px) {
+    .headerContainer {
+        padding: 0 16px;
     }
 }
 

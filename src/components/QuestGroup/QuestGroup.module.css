@@ -8,7 +8,6 @@
     margin-bottom: 18px;
     cursor: pointer;
     user-select: none;
-    /* Чтобы текст не выделялся при клике */
 }
 
 .groupTitle {
@@ -38,8 +37,8 @@
 }
 
 .cardGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(224px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     margin: 0 auto;
     gap: 10px;
     justify-content: center;
@@ -48,6 +47,7 @@
 
 @media (min-width: 768px) and (max-width: 1279px) {
     .cardGrid {
+        display: grid;
         grid-template-columns: repeat(3, 224px);
         justify-content: center;
         gap: 16px;
@@ -56,6 +56,7 @@
 
 @media only screen and (min-width: 1280px) {
     .cardGrid {
+        justify-content: flex-start;
         gap: 22px;
     }
 }

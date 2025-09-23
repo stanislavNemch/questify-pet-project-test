@@ -9,6 +9,7 @@ import css from "./QuestCardCompleted.module.css";
 import { MdArrowForward } from "react-icons/md";
 import vectorLogo from "../../assets/award.svg";
 import { useEscapeKey } from "../hooks/useEscapeKey";
+import { getErrorMessage } from "../utils/errorUtils";
 
 interface QuestCardCompletedProps {
     cardData: CardData;
@@ -31,10 +32,8 @@ export default function QuestCardCompleted({
             toast.success("Completed quest removed!");
             queryClient.invalidateQueries({ queryKey: ["cards"] });
         },
-        onError: (error: any) => {
-            toast.error(
-                error.response?.data?.message || "Failed to remove quest"
-            );
+        onError: (error: unknown) => {
+            toast.error(getErrorMessage(error, "Failed to remove quest"));
         },
     });
 
