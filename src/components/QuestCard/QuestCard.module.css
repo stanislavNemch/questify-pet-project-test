@@ -156,6 +156,30 @@
     color: #b9c3c8;
 }
 
+.dayTitleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.dayTitle {
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    text-align: center;
+    color: #b9c3c8;
+    line-height: 1; /* чтобы высота строки не поднимала иконку */
+}
+
+.fireIcon {
+    width: 18px;
+    height: 18px;
+    display: block; /* убираем влияние линий baseline */
+    flex: 0 0 auto;
+}
+
 .cardBottomContainer {
     display: flex;
     justify-content: space-between;

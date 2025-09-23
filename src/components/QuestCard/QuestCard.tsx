@@ -292,16 +292,18 @@ export default function QuestCard({ card }: QuestCardProps) {
                     <div className={css.cardTitle}>{card.title}</div>
 
                     <div className={css.dateContainer}>
-                        <div className={css.dayTitle}>
-                            {formatDisplayDate(card.date)}, {card.time}
+                        <div className={css.dayTitleContainer}>
+                            <div className={css.dayTitle}>
+                                {formatDisplayDate(card.date)}, {card.time}
+                            </div>
+                            {isQuestDueSoon(card.date, card.time) && (
+                                <BsFire
+                                    className={css.fireIcon}
+                                    color="#ff851c"
+                                    size={18}
+                                />
+                            )}
                         </div>
-                        {isQuestDueSoon(card.date, card.time) && (
-                            <BsFire
-                                color="#ff851c"
-                                style={{ marginLeft: "8px" }}
-                                size="18px"
-                            />
-                        )}
                     </div>
 
                     <div className={css.cardBottomContainer}>

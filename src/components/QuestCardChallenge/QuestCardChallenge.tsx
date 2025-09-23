@@ -229,9 +229,9 @@ export default function QuestCardChallenge({ card }: Props) {
                         </div>
                         {isQuestDueSoon(card.date, card.time) && (
                             <BsFire
+                                className={css.fireIcon}
                                 color="#ff851c"
-                                style={{ marginLeft: "8px" }}
-                                size="18px"
+                                size={18}
                             />
                         )}
                     </div>
